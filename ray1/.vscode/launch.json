@@ -9,6 +9,13 @@
             "name": "RayTracer",
             "request": "launch",
             "mainClass": "ray.RayTracer",
+            "projectName": "ray1_6460f0b3"
+        },
+        {
+            "type": "java",
+            "name": "RayTracer",
+            "request": "launch",
+            "mainClass": "ray.RayTracer",
             "projectName": "ray1_d6fd0895",
             "args": [
                 "scenes/diffuse/one-sphere-diffuse.xml"
@@ -19,6 +26,6 @@
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
-        },
+        }
     ]
 }

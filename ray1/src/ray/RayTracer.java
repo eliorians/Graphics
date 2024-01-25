@@ -1,8 +1,8 @@
 package ray;
 
-
 import ray.light.Light;
 import ray.math.Color;
+import ray.math.Point3;
 import ray.math.Vector3;
 
 import java.io.File;
@@ -83,6 +83,29 @@ public class RayTracer {
 		Vector3[] basis = new Vector3[3];
 
 		// TODO: compute orthonormal basis from projection normal and up vector in scene.camera
+		
+		//get camera and relevant info
+		Camera camera = scene.getCamera();
+		Vector3 viewDirection = camera.viewDir;
+		Vector3 upVector = camera.viewUp;
+		
+		//w vector
+		Vector3 w = new Vector3(viewDirection);
+		w.normalize();
+		
+		//u vector
+		Vector3 u = new Vector3();
+		u.cross(upVector, w);
+		u.normalize();
+
+		//v vector
+		Vector3 v = new Vector3();
+		v.cross(w, u);
+		v.normalize();
+	
+		basis[0] = u;
+		basis[1] = v;
+		basis[2] = w;
 
 		return basis;
 	}
@@ -111,7 +134,6 @@ public class RayTracer {
 		// Get the output image
 		@SuppressWarnings("unused")
 		Image image = scene.getImage();
-
 		// Timing counters
 		long startTime = System.currentTimeMillis();
 
