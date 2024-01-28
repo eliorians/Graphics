@@ -359,6 +359,7 @@ public class Ray1Test2 extends Ray1Helpers
 					"; w=" + basis[2];
 			d.normalize();
 			correctDirection.normalize();
+			System.out.println("Correct vector is: " + correctDirection + " \nYour vector was: " + d);
 			assertEquals(message, correctDirection.x, d.x, EPS);
 			assertEquals(message, correctDirection.y, d.y, EPS);
 			assertEquals(message, correctDirection.z, d.z, EPS);

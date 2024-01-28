@@ -88,7 +88,7 @@ public class RayTracer {
 		Camera camera = scene.getCamera();
 		Vector3 upVector = camera.viewUp;
 		
-		//w vector (opposite view direction)
+		//w vector (projNormal = opposite view direction)
 		Vector3 w = new Vector3(camera.projNormal);
 		w.normalize();
 		
@@ -120,41 +120,30 @@ public class RayTracer {
 	public static Vector3 computeRayDirection(Scene scene, Vector3[] basis, int x, int y) {
 		// TODO: compute ray direction using the camera and image in the scene.
 		
-		Vector3 rayDirection = new Vector3();
-		
 		//gather relavant info
 		Camera camera = scene.getCamera();
 		double viewWidth = camera.viewWidth;
 		double viewHeight = camera.viewHeight;
-		double projDistance = camera.projDistance;
-		int imageWidth = scene.getImage().width;
-		int imageHeight = scene.getImage().height;
+		double d = camera.projDistance;
 
-		//calculate 
-		double ndcX = (2.0 * x) / imageWidth - 1.0;
-		double ndcY = 1.0 - (2.0 * y) / imageHeight;
+		//calculate u and v
+		//see ch4 slide 32 for formula
+		double nX = scene.getImage().width;
+		double nY = scene.getImage().height;
+		double l = -viewWidth / 2;
+		double b = -viewHeight / 2;
+		double r = viewWidth / 2;
+		double t = viewHeight / 2;
 
-		double viewX = ndcX * viewWidth / 2.0;
-		double viewY = ndcY * viewHeight / 2.0;
+		double u = l + (r - l) * (x + .5) / nX;
+		double v = b + (t - b) * (y + .5) / nY;
+		
+		//ray direction from the book pg 92 (4.3.2 Perspective Views)
+		Vector3 rayDirection = new Vector3();
+		rayDirection.scaleAdd(-d, basis[2]); //W
+		rayDirection.scaleAdd(u, basis[0]);  //U
+		rayDirection.scaleAdd(v, basis[1]);  //V
 
-		double imagePlaneX = basis[0].x * viewX + basis[1].x * viewY + basis[2].x * (-projDistance);
-		double imagePlaneY = basis[0].y * viewX + basis[1].y * viewY + basis[2].y * (-projDistance);
-		double imagePlaneZ = basis[0].z * viewX + basis[1].z * viewY + basis[2].z * (-projDistance);
-
-		Point3 cameraPosition = new Point3(
-			camera.viewPoint.x - camera.viewDir.x * projDistance,
-			camera.viewPoint.y - camera.viewDir.y * projDistance,
-			camera.viewPoint.z - camera.viewDir.z * projDistance
-		);
-
-		Vector3 cameraPositionVector = new Vector3(cameraPosition.x, cameraPosition.y, cameraPosition.z);
-
-		Vector3 pointOnImagePlane = new Vector3(imagePlaneX, imagePlaneY, imagePlaneZ);
-		rayDirection.x = pointOnImagePlane.x - cameraPositionVector.x;
-		rayDirection.y = pointOnImagePlane.y - cameraPositionVector.y;
-		rayDirection.z = pointOnImagePlane.z - cameraPositionVector.z;
-
-		rayDirection.normalize();
 		return rayDirection;
 	}
 
