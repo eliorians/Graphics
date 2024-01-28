@@ -82,16 +82,14 @@ public class RayTracer {
 	{
 		Vector3[] basis = new Vector3[3];
 
-		// DONE: compute orthonormal basis from projection normal and up vector in scene.camera
+		// TODO: compute orthonormal basis from projection normal and up vector in scene.camera
 		
 		//get camera and relevant info
 		Camera camera = scene.getCamera();
-		Vector3 viewDirection = camera.viewDir;
 		Vector3 upVector = camera.viewUp;
 		
 		//w vector (opposite view direction)
-		Vector3 w = new Vector3(viewDirection);
-		w.scale(-1);
+		Vector3 w = new Vector3(camera.projNormal);
 		w.normalize();
 		
 		//u vector (up x w)
