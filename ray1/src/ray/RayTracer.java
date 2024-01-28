@@ -162,6 +162,24 @@ public class RayTracer {
 
 		// TODO: Render the image, writing the pixel values into image.
 
+		//compute basis
+		Vector3[] basis = computeBasis(scene);
+
+		//cycle through the rows and columns of the output image
+		for (int y = 0; y < image.height; y++) {
+			for (int x = 0; x < image.width; x++) {
+				//produce a ray for each pixel
+				Vector3 rayDirection = computeRayDirection(scene, basis, x, y);
+				Ray ray = new Ray(scene.getCamera().viewPoint, rayDirection);
+
+				//intersect it with scene
+
+
+				//color the pixel according to the material properties and light illumination
+
+			}
+		}
+
 		// Output time
 		long totalTime = (System.currentTimeMillis() - startTime);
 		System.out.println("Done.  Total rendering time: "
