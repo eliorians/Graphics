@@ -20,14 +20,13 @@ public class Group extends Surface {
 	public HitRecord hit(Ray ray, double t0, double t1) {
 
 		HitRecord hit = null;
-		double closestT = Double.POSITIVE_INFINITY;
 
-		//call hit on every surface and return smallest T value
 		for (Surface surface : surfaces) {
-
+			//calculate the hit for each surface in the group
 			HitRecord surfaceHit = surface.hit(ray, t0, t1);
-			if (surfaceHit != null && surfaceHit.getT() < closestT && surfaceHit.getT() >= t0 && surfaceHit.getT() <= t1) {
-				closestT = surfaceHit.getT();
+			if (surfaceHit != null && surfaceHit.getT() < t1 && surfaceHit.getT() > t0) {
+				//if surface hit, and the T value is at the front, then update closest hit and t1
+				t1 = surfaceHit.getT();
 				hit = surfaceHit;
 			}
 

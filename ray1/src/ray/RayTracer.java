@@ -162,7 +162,7 @@ public class RayTracer {
 		// Timing counters
 		long startTime = System.currentTimeMillis();
 
-		// TODO: Render the image, writing the pixel values into image.
+		// DONE: Render the image, writing the pixel values into image.
 
 		//compute basis
 		Vector3[] basis = computeBasis(scene);
@@ -176,7 +176,7 @@ public class RayTracer {
 				Ray ray = new Ray(scene.getCamera().viewPoint, rayDirection);
 
 				//calculate the hit / intersection
-				HitRecord hit = scene.getGroup().hit(ray, 0.001, Double.POSITIVE_INFINITY);
+				HitRecord hit = scene.getGroup().hit(ray, 0, Double.POSITIVE_INFINITY);
 
 				//if the ray hits something
 				if (hit != null) {
