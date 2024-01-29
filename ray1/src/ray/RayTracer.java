@@ -4,6 +4,7 @@ import ray.light.Light;
 import ray.math.Color;
 import ray.math.Point3;
 import ray.math.Vector3;
+import ray.surface.Surface;
 
 import java.io.File;
 
@@ -82,7 +83,7 @@ public class RayTracer {
 	{
 		Vector3[] basis = new Vector3[3];
 
-		// TODO: compute orthonormal basis from projection normal and up vector in scene.camera
+		// DONE: compute orthonormal basis from projection normal and up vector in scene.camera
 		
 		//get camera and relevant info
 		Camera camera = scene.getCamera();
@@ -118,7 +119,7 @@ public class RayTracer {
 	 * @return the ray direction as a Vector3
 	 */
 	public static Vector3 computeRayDirection(Scene scene, Vector3[] basis, int x, int y) {
-		// TODO: compute ray direction using the camera and image in the scene.
+		// DONE: compute ray direction using the camera and image in the scene.
 		
 		//gather relavant info
 		Camera camera = scene.getCamera();
@@ -129,10 +130,11 @@ public class RayTracer {
 		//calculate u and v
 		//see ch4 slide 32 for formula
 		double nX = scene.getImage().width;
-		double nY = scene.getImage().height;
 		double l = -viewWidth / 2;
-		double b = -viewHeight / 2;
 		double r = viewWidth / 2;
+
+		double nY = scene.getImage().height;
+		double b = -viewHeight / 2;
 		double t = viewHeight / 2;
 
 		double u = l + (r - l) * (x + .5) / nX;
@@ -168,14 +170,24 @@ public class RayTracer {
 		//cycle through the rows and columns of the output image
 		for (int y = 0; y < image.height; y++) {
 			for (int x = 0; x < image.width; x++) {
+
 				//produce a ray for each pixel
 				Vector3 rayDirection = computeRayDirection(scene, basis, x, y);
 				Ray ray = new Ray(scene.getCamera().viewPoint, rayDirection);
 
-				//intersect it with scene
+				//calculate the hit / intersection
+				HitRecord hit = scene.getGroup().hit(ray, 0.001, Double.POSITIVE_INFINITY);
 
-
-				//color the pixel according to the material properties and light illumination
+				//if the ray hits something
+				if (hit != null) {
+					//color the pixel according to the material properties and light illumination
+					Color pixelColor = new Color();
+					for (Light light : scene.getLights()) {
+						Color lightContribution = light.illuminate(ray, hit, scene);
+						pixelColor.add(lightContribution);
+					}
+					image.setPixelColor(pixelColor, x, y);
+				}
 
 			}
 		}

@@ -20,6 +20,5 @@ public abstract class Surface {
 	// TODO: add abstract intersection method
 	/* Solution */
 	public abstract HitRecord hit(Ray ray, double t0, double t1);
-	/* End Solution */
-	
+	/* End Solution */	
 }
