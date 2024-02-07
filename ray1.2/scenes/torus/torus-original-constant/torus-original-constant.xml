@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--  Test scene with a single sphere.
+ -->
+<scene>
+  <camera>
+    <viewPoint>0 0 1</viewPoint>
+    <viewDir>0 0 -1</viewDir>
+    <projNormal>0 0 1</projNormal>
+    <viewUp>0 1 0</viewUp>
+    <projDistance>1</projDistance>
+    <viewWidth>2.5</viewWidth>
+    <viewHeight>2.5</viewHeight>
+  </camera>
+  <image>
+    300 300
+  </image>
+  <material name="blue" type="Lambertian">
+    <ambientColor>.2 .3 .8</ambientColor>
+  </material>
+  <surface type="Torus">
+    <material ref="blue" />
+    <center>0 0 0</center>
+    <axis>0 0 1</axis>
+    <minorRadius>0.1</minorRadius>
+    <majorRadius>1</majorRadius>
+  </surface>
+  <light type="ConstantLight"/>
+</scene>

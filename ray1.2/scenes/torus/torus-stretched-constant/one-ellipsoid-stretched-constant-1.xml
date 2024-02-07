@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--  Test scene with a single sphere.
+ -->
+<scene>
+  <camera>
+    <viewPoint>20 16 12</viewPoint>
+    <viewDir>-5 -4 -3</viewDir>
+    <projNormal>5 4 3</projNormal>
+    <viewUp>0 1 0</viewUp>
+    <projDistance>5</projDistance>
+    <viewWidth>2.5</viewWidth>
+    <viewHeight>2.5</viewHeight>
+  </camera>
+  <image>
+    300 300
+  </image>
+  <material name="blue" type="Lambertian">
+    <diffuseColor>.2 .3 .8</diffuseColor>
+  </material>
+  <surface type="Ellipsoid">
+    <material ref="blue" />
+    <center>0 0 0</center>
+    <aAxis>1 0 0</aAxis>
+    <bAxis>0 1 0</bAxis>
+    <cAxis>0 0 1</cAxis>    
+    <a>6</a>
+    <b>3</b>
+    <c>4.5</c>
+  </surface>
+  <light type="ConstantLight"/>
+</scene>

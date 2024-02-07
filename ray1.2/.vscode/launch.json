@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "RayTracer",
+            "request": "launch",
+            "mainClass": "ray.RayTracer",
+            "projectName": "ray1.2_solution_b2029e45",
+            "args": [
+                "scenes/ellipsoid/easter-eggs"
+            ]
+        },
+        {
+            "type": "java",
+            "name": "RayTracer",
+            "request": "launch",
+            "mainClass": "ray.RayTracer",
+            "projectName": "ray1_d6fd0895",
+            "args": [
+                "scenes/ellipsoid-constant/one-ellipsoid-constant.xml"
+            ]
+        },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        }
+    ]
+}

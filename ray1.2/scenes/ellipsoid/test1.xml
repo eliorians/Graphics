@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--  Test scene with a single sphere.
+ -->
+<scene>
+  <camera>
+    <viewPoint>10 0 0</viewPoint>
+    <viewDir>-1 0 0</viewDir>
+    <projNormal>1 0 0</projNormal>
+    <viewUp>0 1 0</viewUp>
+    <projDistance>1</projDistance>
+    <viewWidth>1</viewWidth>
+    <viewHeight>1</viewHeight>
+  </camera>
+  <image>
+    1 1
+  </image>
+  <surface type="Ellipsoid">
+    <center>-1 0 0</center>
+    <aAxis>1 0 0</aAxis>
+    <bAxis>0 1 0</bAxis>
+    <cAxis>0 0 1</cAxis>    
+    <a>2</a>
+    <b>1</b>
+    <c>1</c>
+  </surface>
+  <light type="NormalLight"/>
+</scene>

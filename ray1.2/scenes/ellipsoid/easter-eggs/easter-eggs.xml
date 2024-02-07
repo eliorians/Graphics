@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--  Test scene with a single sphere.
+ -->
+<scene>
+  <camera>
+    <viewPoint>15 20 20</viewPoint>
+    <viewDir>-20 -20 -20</viewDir>
+    <projNormal>20 20 20</projNormal>
+    <viewUp>0 1 0</viewUp>
+    <projDistance>5</projDistance>
+    <viewWidth>2.5</viewWidth>
+    <viewHeight>2.5</viewHeight>
+  </camera>
+  <image>
+    300 300
+  </image>
+  <material name="red" type="Phong">
+    <ambientColor>1 .3 .2</ambientColor>
+    <diffuseColor>1 .3 .2</diffuseColor>
+    <specularColor>1 1 1</specularColor>
+    <exponent>30</exponent>
+  </material>
+  <material name="green" type="Phong">
+    <ambientColor>.2 1 .3</ambientColor>
+    <diffuseColor>.2 1 .3</diffuseColor>
+    <specularColor>1 1 1</specularColor>
+    <exponent>30</exponent>
+  </material>
+  <material name="blue" type="Phong">
+    <ambientColor>.2 .3 .1</ambientColor>
+    <diffuseColor>.2 .3 1</diffuseColor>
+    <specularColor>1 1 1</specularColor>
+    <exponent>30</exponent>
+  </material>  
+  <material name="yellow" type="Phong">
+    <ambientColor>1 1 .2</ambientColor>
+    <diffuseColor>1 1 .2</diffuseColor>
+    <specularColor>1 1 1</specularColor>
+    <exponent>30</exponent>
+  </material>
+  <material name="magenta" type="Phong">
+    <ambientColor>1 .2 1</ambientColor>
+    <diffuseColor>1 .2 1</diffuseColor>
+    <specularColor>1 1 1</specularColor>
+    <exponent>30</exponent>
+  </material>
+  <material name="cyan" type="Phong">
+    <ambientColor>.2 1 1</ambientColor>
+    <diffuseColor>.2 1 1</diffuseColor>
+    <specularColor>1 1 1</specularColor>
+    <exponent>30</exponent>
+  </material>
+  <surface type="Ellipsoid">
+    <material ref="blue" />
+    <center>0 0 2</center>
+    <aAxis>0 1 0</aAxis>
+    <bAxis>1 0 0</bAxis>
+    <cAxis>0 0 1</cAxis>    
+    <a>3</a>
+    <b>2</b>
+    <c>2</c>
+  </surface>
+  <surface type="Ellipsoid">
+    <material ref="green" />
+    <center>0 0 -2</center>
+    <aAxis>0 1 0</aAxis>
+    <bAxis>1 0 0</bAxis>
+    <cAxis>0 0 1</cAxis>    
+    <a>3</a>
+    <b>2</b>
+    <c>2</c>
+  </surface>
+  <surface type="Ellipsoid">
+    <material ref="red" />
+    <center>-4 0 2</center>
+    <aAxis>0 1 0</aAxis>
+    <bAxis>1 0 0</bAxis>
+    <cAxis>0 0 1</cAxis>    
+    <a>3</a>
+    <b>2</b>
+    <c>2</c>
+  </surface>
+  <surface type="Ellipsoid">
+    <material ref="yellow" />
+    <center>-4 0 -2</center>
+    <aAxis>0 1 0</aAxis>
+    <bAxis>1 0 0</bAxis>
+    <cAxis>0 0 1</cAxis>    
+    <a>3</a>
+    <b>2</b>
+    <c>2</c>
+  </surface>
+  <surface type="Ellipsoid">
+    <material ref="magenta" />
+    <center>-8 0 2</center>
+    <aAxis>0 1 0</aAxis>
+    <bAxis>1 0 0</bAxis>
+    <cAxis>0 0 1</cAxis>    
+    <a>3</a>
+    <b>2</b>
+    <c>2</c>
+  </surface>
+  <surface type="Ellipsoid">
+    <material ref="cyan" />
+    <center>-8 0 -2</center>
+    <aAxis>0 1 0</aAxis>
+    <bAxis>1 0 0</bAxis>
+    <cAxis>0 0 1</cAxis>    
+    <a>3</a>
+    <b>2</b>
+    <c>2</c>
+  </surface>
+  <light type="PointLight">
+    <position>10 9 8</position>
+    <intensity>100 100 100</intensity>
+  </light>
+  <light type="PointLight">
+    <position>-10 9 8</position>
+    <intensity>100 100 100</intensity>
+  </light>
+  <light type="AmbientLight">
+    <intensity>.1 .1 .1</intensity>
+  </light>
+</scene>
