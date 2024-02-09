@@ -5,6 +5,7 @@ import ray.Ray;
 import ray.Scene;
 import ray.math.Color;
 import ray.math.Point3;
+import ray.math.Vector3;
 
 /**
  * This class represents a basic point light which is infinitely small and emits
@@ -37,7 +38,9 @@ public class PointLight extends Light {
 	}
 
 	//TODO: this
-	public Color illuminate(Ray ray, HitRecord hitRecord, Scene scene) {
+	public Color illuminate(Ray ray, HitRecord hitRecord, Scene scene) 
+	{
 		throw new UnsupportedOperationException();
+		
 	}
 }

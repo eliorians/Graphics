@@ -38,6 +38,52 @@ public class Ellipsoid extends Surface {
     @Override
     public HitRecord hit(Ray ray, double t0, double t1) 
 	{
-        throw new UnsupportedOperationException();
+        //throw new UnsupportedOperationException();
+		HitRecord hit = new HitRecord();
+
+		//set up ray equation
+		Point3 o = ray.getOrigin();
+		Vector3 d = ray.getDirection();
+
+		//set up ellipsoid equation
+		//(x^2/a^2) + (y^2/b^2) + (z^2/c^2) - 1 = 0
+		//x,y,z = coords on ellipse (ray)
+		//a,b,c = x,y,z axis length respectfully
+		
+		//todo do calculations for when ellipse is not a perfect sphere?
+		double a = 1;
+		double b = 1;
+		double c = 1;
+		
+		//calc quadratic equation coefficents
+		double A = d.x * d.x / a * a + d.y * d.y / b * b + d.z * d.z / c * c;
+		double B = 2 * (o.x * d.x / a * a + o.y * d.y / b * b + o.z * d.z / c * c);
+		double C = o.x * o.x / a * a + o.y * o.y / b * b + o.z * o.z / c * c - 1;
+
+		//solve quadratic for t
+		double[] roots = solveQuadratic(A, B, C);
+
+		//see if it hits
+		for (double root : roots) {
+			if (root >= t0 && root <= t1) {
+
+				// calc intersection point
+				Point3 intersectionPoint = ray.evaluate(root);
+				
+				//calc normal
+				Vector3 normal = new Vector3(
+                    2 * intersectionPoint.x / (a * a),
+                    2 * intersectionPoint.y / (b * b),
+                    2 * intersectionPoint.z / (c * c)
+            	);
+
+				// return the hit
+				hit.set(this, root, normal);
+				return hit;
+			}
+		}
+
+        // No intersection found
+        return null;		
     }
 }

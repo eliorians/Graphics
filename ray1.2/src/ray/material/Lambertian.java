@@ -27,8 +27,19 @@ public class Lambertian extends Material {
 		return "lambertian: " + ambientColor + " " + diffuseColor + " end";
 	}
 	
-	//TODO: this (DIFFUSE)
-	public Color shade(Vector3 l, Vector3 v, Vector3 n) {
-		throw new UnsupportedOperationException();
+	//TODO: this (DIFFUSE - reflects in all directions)
+	public Color shade(Vector3 l, Vector3 v, Vector3 n) 
+	{
+		//throw new UnsupportedOperationException();
+		// diffuse relation coefficient * (N dot L) * light intensity * diffuse color ?
+
+		//dot of l and n
+		double dotProduct = Math.max(0.0, l.dot(n));
+		//create copy of color
+		Color diffuseReflection = new Color(diffuseColor);
+		//do calculation
+		diffuseReflection.scale(dotProduct);
+	
+		return diffuseReflection;
 	}
 }

@@ -2,6 +2,7 @@ package ray;
 
 import ray.light.Light;
 import ray.math.Color;
+import ray.math.Point3;
 import ray.math.Vector3;
 import java.io.File;
 
@@ -124,6 +125,7 @@ public class RayTracer {
 		double viewHeight = camera.viewHeight;
 		double d = camera.projDistance;
 
+
 		//calculate u and v
 		//see ch4 slide 32 for formula
 		double nX = scene.getImage().width;
@@ -136,6 +138,26 @@ public class RayTracer {
 
 		double u = l + (r - l) * (x + .5) / nX;
 		double v = b + (t - b) * (y + .5) / nY;
+
+		//TODO: shifted perspectives
+		// Vector3 projNormal = camera.projNormal;
+		// projNormal.normalize();
+
+		// Vector3 viewDir = camera.viewDir;
+		// viewDir.normalize();
+		// viewDir.scale(d);
+
+		// Point3 centerOfViewPlane = camera.viewPoint;
+		// centerOfViewPlane.add(viewDir);
+
+		// Vector3 newW = projNormal;
+		// Vector3 newU = basis[0];
+		// Vector3 newV = basis[1];
+
+		// Vector3 rayDirection = new Vector3();
+		// rayDirection.scaleAdd(-d, newW); // W
+		// rayDirection.scaleAdd(u, newU);  // U
+		// rayDirection.scaleAdd(v, newV);  // V
 		
 		//ray direction from the book pg 92 (4.3.2 Perspective Views)
 		Vector3 rayDirection = new Vector3();
