@@ -125,6 +125,7 @@ public class RayTracer {
 		double viewWidth = camera.viewWidth;
 		double viewHeight = camera.viewHeight;
 		double d = camera.projDistance;
+		Vector3 viewDir = camera.viewDir;
 
 		//calculate u and v
 		//see ch4 slide 32 for formula
@@ -139,15 +140,21 @@ public class RayTracer {
 		double u = l + (r - l) * (x + .5) / nX;
 		double v = b + (t - b) * (y + .5) / nY;
 		
-		//ray direction from the book pg 92 (4.3.2 Perspective Views)
 		Vector3 rayDirection = new Vector3();
-		rayDirection.scaleAdd(-d, basis[2]); //W
-		rayDirection.scaleAdd(u, basis[0]);  //U
-		rayDirection.scaleAdd(v, basis[1]);  //V
 
+		//non-oblique formula
+		// rayDirection.scaleAdd(-d, basis[2]); //-dW
+		// rayDirection.scaleAdd(u, basis[0]);  //uU
+		// rayDirection.scaleAdd(v, basis[1]);  //vV
+
+		//oblique formula
+		viewDir.normalize();
+		rayDirection.scaleAdd(d, viewDir);   //dD
+		rayDirection.scaleAdd(u, basis[0]);  //uU
+		rayDirection.scaleAdd(v, basis[1]);  //vV
+	
 		return rayDirection;
 	}
-	
 
 	/**
 	 * The renderImage method renders the entire scene.

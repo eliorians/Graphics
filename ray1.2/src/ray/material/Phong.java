@@ -32,8 +32,24 @@ public class Phong extends Lambertian {
 	//TODO: this (SPECULAR)
 	@Override
 	public Color shade(Vector3 l, Vector3 v, Vector3 n) {
-		throw new UnsupportedOperationException();
-	}
+		//compute halfway vector
+		Vector3 h = new Vector3();
+		h.add(l, v);
+		h.normalize();
 
+		//compute diffuse
+		Color diffusePart = this.diffuseColor;
+
+		//compute specular
+		Color specularPart = new Color(specularColor); 
+		specularPart.scale(Math.pow(Math.max(0, n.dot(h)), exponent));
+
+		//final
+		Color reflectanceCoefficient = new Color(diffusePart);
+		reflectanceCoefficient.add(specularPart);
+
+		return reflectanceCoefficient;
+
+	}
 }
 

@@ -48,16 +48,6 @@ public class Ellipsoid extends Surface {
 		//(x^2/a^2) + (y^2/b^2) + (z^2/c^2) - 1 = 0
 		//x,y,z = coords on ellipse (ray)
 		//a,b,c = x,y,z axis length respectfully
-		//where min and max are the bounding coords of a box around the ellipsoid
-		double xMin = center.x - a;
-		double xMax = center.x + a;
-		double yMin = center.y - b;
-		double yMax = center.y + b;
-		double zMin = center.z - c;
-		double zMax = center.z + c;
-		setA((xMax - xMin) / 2.0);
-		setB((yMax - yMin) / 2.0);
-		setC((zMax - zMin) / 2.0);
 
 		//localize ray direction
 		double rayDx = d.dot(aAxis);
