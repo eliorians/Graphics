@@ -62,27 +62,13 @@ public class PointLight extends Light {
 		//compute illumination if nothing in the way
 		if (shadowHit == null || shadowHit.getT() >= r)
 		{	
-			// formula trying to acheive :
-			// kd I max(0, n · li) + ks I max(0, n · hi)^p
-			
 			//setup vars
 			Vector3 n = hitRecord.getNormal();
-			Vector3 h = new Vector3();
-			Color I = new Color(intensity);
-			h.add(l, v);
-			h.normalize();
-			Color k = hitRecord.getSurface().getMaterial().shade(l, v, n);
-			//ray.material.Material material = hitRecord.getSurface().getMaterial();
-			
-			//Ii 
-			Color diffusePart = new Color(I); 
-			//max(0, n · li)
-			diffusePart.scale(Math.max(0, n.dot(l)) / r / r);
-			//kd
-			diffusePart.scale(k);
-			c = diffusePart;
 
-			// + specular stuff	
+			// formula trying to acheive within:
+			// kd I max(0, n · li) <- when lambertion material
+			// kd I max(0, n · li) + ks I max(0, n · hi)^p <- when phong material
+			c = hitRecord.getSurface().getMaterial().shade(l, v, n, intensity, r);
 		}
 
 		// otherwise return black

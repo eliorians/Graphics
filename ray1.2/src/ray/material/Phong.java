@@ -29,26 +29,37 @@ public class Phong extends Lambertian {
 		return "phong " + ambientColor + " " + diffuseColor + " " + specularColor + " " + exponent + " end";
 	}
 	
-	//TODO: this (SPECULAR)
 	@Override
-	public Color shade(Vector3 l, Vector3 v, Vector3 n) {
-		//compute halfway vector
+	public Color shade(Vector3 l, Vector3 v, Vector3 n, Color intensity, double r) {
+
+		//       diffuse        +      specular
+		// kd I max(0, n · li)  +  ks I max(0, n · hi)^p
+
+		//setup vars
 		Vector3 h = new Vector3();
 		h.add(l, v);
 		h.normalize();
 
-		//compute diffuse
-		Color diffusePart = this.diffuseColor;
+		//diffuse component= kd I max(0, n · li)
+		//kd
+		Color diffuse = new Color(diffuseColor);
+		//lI
+		diffuse.scale(intensity);
+		//max(0, n · li)
+		diffuse.scale(Math.max(0, n.dot(l)) / r / r);
 
-		//compute specular
-		Color specularPart = new Color(specularColor); 
-		specularPart.scale(Math.pow(Math.max(0, n.dot(h)), exponent));
+		//specular component= ks I max(0, n · hi)^p
+		//ks
+		Color specular = new Color(specularColor);
+		//I
+		specular.scale(intensity);
+		// max(0, n · hi)^p
+		specular.scale(Math.pow(Math.max(0, n.dot(h)), exponent) / r / r);
 
-		//final
-		Color reflectanceCoefficient = new Color(diffusePart);
-		reflectanceCoefficient.add(specularPart);
-		
-		return reflectanceCoefficient;
+		//add them together
+		Color c = new Color(diffuse);
+		c.add(specular);
 
+		return c;
 	}
 }

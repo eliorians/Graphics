@@ -28,6 +28,6 @@ public abstract class Material {
 		return "material: " + ambientColor + " end";
 	}
   
-  public abstract Color shade(Vector3 l, Vector3 v, Vector3 n);
+  public abstract Color shade(Vector3 l, Vector3 v, Vector3 n, Color intensity, double r);
 
 }

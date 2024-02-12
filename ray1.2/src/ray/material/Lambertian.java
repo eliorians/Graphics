@@ -26,12 +26,17 @@ public class Lambertian extends Material {
 		return "lambertian: " + ambientColor + " " + diffuseColor + " end";
 	}
 	
-	//(DIFFUSE - reflects in all directions)
-	public Color shade(Vector3 l, Vector3 v, Vector3 n) 
+	public Color shade(Vector3 l, Vector3 v, Vector3 n, Color intensity, double r) 
 	{
+		//diffuse component only
 		//kd Ii max(0, n · li)
-		Color diffuse = new Color(ambientColor);
-		diffuse.scale(diffuseColor);
+
+		//kd
+		Color diffuse = new Color(diffuseColor);
+		//lI
+		diffuse.scale(intensity);
+		//max(0, n · li)
+		diffuse.scale(Math.max(0, n.dot(l)) / r / r);
 		
 		return diffuse;
 	}
