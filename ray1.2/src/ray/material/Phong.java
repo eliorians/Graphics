@@ -38,8 +38,7 @@ public class Phong extends Lambertian {
 		h.normalize();
 
 		//compute diffuse
-		//Color diffusePart = this.diffuseColor;
-		Color diffusePart = new Color(this.diffuseColor);
+		Color diffusePart = this.diffuseColor;
 
 		//compute specular
 		Color specularPart = new Color(specularColor); 
@@ -50,6 +49,6 @@ public class Phong extends Lambertian {
 		reflectanceCoefficient.add(specularPart);
 		
 		return reflectanceCoefficient;
+
 	}
 }
-

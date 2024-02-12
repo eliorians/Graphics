@@ -14,7 +14,6 @@ public class Group extends Surface {
 
 	@Override
 	public HitRecord hit(Ray ray, double t0, double t1) {
-		//throw new UnsupportedOperationException();
 		HitRecord hit = null;
 
 		for (Surface surface : surfaces) {

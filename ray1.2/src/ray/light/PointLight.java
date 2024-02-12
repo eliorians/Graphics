@@ -62,16 +62,27 @@ public class PointLight extends Light {
 		//compute illumination if nothing in the way
 		if (shadowHit == null || shadowHit.getT() >= r)
 		{	
-			//calculate the illumination due to the point light source
+			// formula trying to acheive :
+			// kd I max(0, n · li) + ks I max(0, n · hi)^p
+			
+			//setup vars
 			Vector3 n = hitRecord.getNormal();
-			Color irradiance = new Color(intensity);
-			irradiance.scale(Math.max(0, n.dot(l)) / r / r);
-			Color reflectanceCoefficient = hitRecord.getSurface().getMaterial().shade(l, v, n);
+			Vector3 h = new Vector3();
+			Color I = new Color(intensity);
+			h.add(l, v);
+			h.normalize();
+			Color k = hitRecord.getSurface().getMaterial().shade(l, v, n);
+			//ray.material.Material material = hitRecord.getSurface().getMaterial();
+			
+			//Ii 
+			Color diffusePart = new Color(I); 
+			//max(0, n · li)
+			diffusePart.scale(Math.max(0, n.dot(l)) / r / r);
+			//kd
+			diffusePart.scale(k);
+			c = diffusePart;
 
-			//multiply by materials reflectance coefficeint
-			Color reflectedLight = new Color(irradiance);
-			reflectedLight.scale(reflectanceCoefficient);
-			c = reflectedLight;
+			// + specular stuff	
 		}
 
 		// otherwise return black

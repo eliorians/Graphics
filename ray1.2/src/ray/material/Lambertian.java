@@ -16,7 +16,6 @@ public class Lambertian extends Material {
 
 	// public void setColor(Color color) { setAmbientColor(color); setDiffuseColor(color); }
 
-  
 	public Lambertian() { }	
 
 	/**
@@ -30,9 +29,10 @@ public class Lambertian extends Material {
 	//(DIFFUSE - reflects in all directions)
 	public Color shade(Vector3 l, Vector3 v, Vector3 n) 
 	{
+		//kd Ii max(0, n · li)
 		Color diffuse = new Color(ambientColor);
 		diffuse.scale(diffuseColor);
-	
+		
 		return diffuse;
 	}
 }
