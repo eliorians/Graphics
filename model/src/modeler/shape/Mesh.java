@@ -139,6 +139,8 @@ public class Mesh {
 	public void render(GL gl) {
 		// TODO: Part 1: Implement this method.
 
+		gl.glEnable(GL.GL_CULL_FACE);
+		gl.glCullFace(GL.GL_BACK);
 		gl.glBegin(GL.GL_TRIANGLES);
 
 		for (int i = 0 ; i < numTriangles; i++)
@@ -147,12 +149,17 @@ public class Mesh {
 			int v2Index = triangles.get(i * 3 + 1);
 			int v3Index = triangles.get(i * 3 + 2);
 
+			gl.glNormal3f(normals.get(v1Index * 3), normals.get(v1Index * 3 + 1), normals.get(v1Index * 3 + 2));
+			gl.glNormal3f(normals.get(v2Index * 3), normals.get(v2Index * 3 + 1), normals.get(v2Index * 3 + 2));
+			gl.glNormal3f(normals.get(v3Index * 3), normals.get(v3Index * 3 + 1), normals.get(v3Index * 3 + 2));
+
 			gl.glVertex3f(verts.get(v1Index * 3), verts.get(v1Index * 3 + 1), verts.get(v1Index * 3 + 2));
 			gl.glVertex3f(verts.get(v2Index * 3), verts.get(v2Index * 3 + 1), verts.get(v2Index * 3 + 2));
 			gl.glVertex3f(verts.get(v3Index * 3), verts.get(v3Index * 3 + 1), verts.get(v3Index * 3 + 2));
 		}
 
 		gl.glEnd();
+		gl.glDisable(GL.GL_CULL_FACE);
 	}
 
 	/**
