@@ -154,6 +154,7 @@ public class Transformation extends SceneNode {
 	public int render(GL gl, GLU glu) {
 		int outCount = 0;
 
+		//Push the current untranslated matrix
 		gl.glPushMatrix();
 
 		//Translate
@@ -170,6 +171,7 @@ public class Transformation extends SceneNode {
 		///// TODO: Part 1: fill in code before and after super.render to render children correctly
 		outCount = super.render(gl, glu);
 		
+		//return to the original matrix for future operations
 		gl.glPopMatrix();
 
 		return outCount;
