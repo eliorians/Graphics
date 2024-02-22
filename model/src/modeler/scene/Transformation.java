@@ -154,8 +154,17 @@ public class Transformation extends SceneNode {
 	public int render(GL gl, GLU glu) {
 		int outCount = 0;
 
+		gl.glPushMatrix();
+		gl.glTranslatef(T.x, T.y, T.z); // Translate
+		gl.glRotatef(R.x, 1, 0, 0); // Rotate around X-axis
+		gl.glRotatef(R.y, 0, 1, 0); // Rotate around Y-axis
+		gl.glRotatef(R.z, 0, 0, 1); // Rotate around Z-axis
+		gl.glScalef(S.x, S.y, S.z); // Scale
+
 		// TODO: Part 1: fill in code before and after super.render to render children correctly
 		outCount = super.render(gl, glu);
+		
+		gl.glPopMatrix();
 
 		return outCount;
 	}
