@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MainFrame",
+            "request": "launch",
+            "mainClass": "modeler.MainFrame",
+            "projectName": "model_277cc53d"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
@@ -17,7 +24,6 @@
             "mainClass": "modeler.MainFrame",
             "projectName": "model_solution_26bd1e77",
             "cwd": "${workspaceFolder}"
-            //"args": ["scenes/cube.xml"]
         }
     ]
 }

@@ -35,21 +35,15 @@ public class Cylinder extends Shape {
 			return;
 		}
 
-		//!
-
+		//get the flatness tolerance
 		float flatnessTolerance = Shape.TOLERANCE;
-		int numFacets = calculateNumFacets(flatnessTolerance);
 
-		//The vertices of the cylinder
+		//do all these calculations to get triangle points around cylinder
+		int numFacets = generateFacets(flatnessTolerance);
+
 		Point3f[] vertices = generateVertices(numFacets);
-
-		//The normals of the cylinder
-		Vector3f[] normals = generateVertices(numFacets);
-
-		//The triangles of the cylinder
-		Point3i[] triangles = generateVertices(numFacets);
-
-		//!
+		Vector3f[] normals = generateNormals(numFacets);
+		Point3i[] triangles = generateTriangles(numFacets);
 
 		//Build the mesh data arrays from the static mesh data
 		int vertLength = vertices.length;
@@ -84,4 +78,75 @@ public class Cylinder extends Shape {
 		cylinderMesh = new Mesh(vertData, triData, normData);
 		mesh = cylinderMesh;
 	}
+
+	/**
+	 * 
+	 * @param flatnessTolerance the # set by the user in the program via scaler
+	 * @return the number of facets to use to create the cylinder
+	 */
+	int generateFacets(float flatnessTolerance)
+	{
+		double angle = Math.acos(1.0 - flatnessTolerance);
+		int numFacets = (int) Math.round(2 * Math.PI / angle);
+		
+		//ensure even
+		numFacets = numFacets % 2 == 0 ? numFacets : numFacets + 1;
+		//ensure >= 6
+		numFacets = Math.max(6, numFacets);
+
+		return numFacets;
+	}
+
+	Point3f[] generateVertices(int numFacets)
+	{
+		Point3f[] vertices = new Point3f[numFacets];
+
+		//generate vertices for base layer
+		float angleIncrement = 2 * (float) Math.PI / numFacets;
+		for (int i = 0; i < numFacets; i++) {
+            //calculate the angle for this vertex
+            float angle = i * angleIncrement;
+
+            //calculate the x, y, and z coordinates
+            float x = CYLINDER_RADIUS * (float) Math.cos(angle);
+            float y = CYLINDER_RADIUS * (float) Math.sin(angle);
+            float z = 0.0f;
+
+            // Set the vertex coordinates
+            vertices[i] = new Point3f(x, y, z);
+        }
+		
+		return vertices;
+	}
+
+	Vector3f[] generateNormals(int numFacets)
+	{
+		Vector3f[] normals = new Vector3f[numFacets];
+
+		//generate normals for base layer
+		Vector3f baseNormal = new Vector3f(0.0f, 0.0f, 1.0f);
+		for (int i = 0; i < numFacets; i++) {
+            normals[i] = baseNormal;
+        }
+
+		return normals;
+	}
+
+	Point3i[] generateTriangles(int numFacets)
+	{
+		Point3i[] triangles = new Point3i[numFacets];
+
+		//generate triangles for base layer
+		for (int i = 0; i < numFacets; i++) {
+            int vertex1 = i;
+            int vertex2 = (i + 1) % numFacets; // Wrap around to connect the last vertex to the first
+            int vertex3 = numFacets; // Index of the center vertex (origin)
+
+            // Create the triangle using the vertex indices
+            triangles[i] = new Point3i(vertex1, vertex2, vertex3);
+        }
+
+		return triangles;
+	}
+
 }
