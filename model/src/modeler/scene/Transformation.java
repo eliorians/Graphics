@@ -160,10 +160,10 @@ public class Transformation extends SceneNode {
 		//Translate
 		gl.glTranslatef(T.x, T.y, T.z); 
 
-		//Rotation around axis (x,y,z)
-		gl.glRotatef(R.x, 1, 0, 0);
-		gl.glRotatef(R.y, 0, 1, 0);
+		//Rotation around axis (x,y,z in reverse order)
 		gl.glRotatef(R.z, 0, 0, 1);
+		gl.glRotatef(R.y, 0, 1, 0);
+		gl.glRotatef(R.x, 1, 0, 0);
 
 		// Scale
 		gl.glScalef(S.x, S.y, S.z);
