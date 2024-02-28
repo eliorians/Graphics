@@ -45,26 +45,26 @@ public class Cylinder extends Shape {
 		Vector3f[] normals = generateNormals(numFacets);
 		Point3i[] triangles = generateTriangles(numFacets);
 
-		// System.out.println("-------------------------");
-		// System.out.println("flatnessTolerance: " + flatnessTolerance);
-		// System.out.println("numFacets: " + numFacets);
-		// System.out.println("Vertices:");
-		// for (Point3f vertex : vertices) {
-		// 	System.out.println(vertex);
-		// }
+		System.out.println("-------------------------");
+		System.out.println("flatnessTolerance: " + flatnessTolerance);
+		System.out.println("numFacets: " + numFacets);
+		System.out.println("Vertices:");
+		for (Point3f vertex : vertices) {
+			System.out.println(vertex);
+		}
 
-		// // Printing normals
-		// System.out.println("Normals:");
-		// for (Vector3f normal : normals) {
-		// 	System.out.println(normal);
-		// }
+		// Printing normals
+		System.out.println("Normals:");
+		for (Vector3f normal : normals) {
+			System.out.println(normal);
+		}
 
-		// // Printing triangles
-		// System.out.println("Triangles:");
-		// for (Point3i triangle : triangles) {
-		// 	System.out.println(triangle);
-		// }
-		// System.out.println("-------------------------");
+		// Printing triangles
+		System.out.println("Triangles:");
+		for (Point3i triangle : triangles) {
+			System.out.println(triangle);
+		}
+		System.out.println("-------------------------");
 
 		//Build the mesh data arrays from the static mesh data
 		int vertLength = vertices.length;
@@ -81,24 +81,23 @@ public class Cylinder extends Shape {
 		//Copy the vertex data
 		for(int i = 0; i < vertLength; i++) {
 
-			// System.out.println("Triangle: " + i);
-
 			vertData[3*i] = vertices[i].x;
 			vertData[3*i+1] = vertices[i].y;
 			vertData[3*i+2] = vertices[i].z;
+			
+			normData[3*i] = normals[i].x;
+			normData[3*i+1] = normals[i].y;
+			normData[3*i+2] = normals[i].z;
+
+			// System.out.println("Triangle: " + i);
 			// System.out.println("Vertices: ");
 			// System.out.println(vertData[3*i]);
 			// System.out.println(vertData[3*i+1]);
 			// System.out.println(vertData[3*i+2]);
-
-			normData[3*i] = normals[i].x;
-			normData[3*i+1] = normals[i].y;
-			normData[3*i+2] = normals[i].z;
 			// System.out.println("Normals:");
 			// System.out.println(normData[3*i]);
 			// System.out.println(normData[3*i+1]);
 			// System.out.println(normData[3*i+2]);
-			// System.out.println("");
 		}
 
 		//Copy the triangle data
@@ -108,11 +107,11 @@ public class Cylinder extends Shape {
 			triData[3*i+1] = triangles[i].y;
 			triData[3*i+2] = triangles[i].z;
 			
-			System.out.println("Triangle: " + i);
-			System.out.println(triData[3*i]);
-			System.out.println(triData[3*i+1]);
-			System.out.println(triData[3*i+2]);
-			System.out.println("");
+			// System.out.println("Triangle: " + i);
+			// System.out.println(triData[3*i]);
+			// System.out.println(triData[3*i+1]);
+			// System.out.println(triData[3*i+2]);
+			// System.out.println("");
 
 		}
 
@@ -145,7 +144,7 @@ public class Cylinder extends Shape {
 			double angle = i * angleIncrement;
 			float x = CYLINDER_RADIUS * cos(angle);
 			float z = CYLINDER_RADIUS * sin(angle);
-			vertices[i] = new Point3f(x, 0, z);
+			vertices[i] = new Point3f(x, -1, z);
 		}
 		
 		return vertices;
