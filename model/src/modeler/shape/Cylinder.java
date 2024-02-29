@@ -45,25 +45,22 @@ public class Cylinder extends Shape {
 		Vector3f[] normals = generateNormals(numFacets);
 		Point3i[] triangles = generateTriangles(numFacets);
 
+		//Print Result of Generating
 		System.out.println("-------------------------");
 		System.out.println("flatnessTolerance: " + flatnessTolerance);
 		System.out.println("numFacets: " + numFacets);
-		System.out.println("Vertices:");
-		for (Point3f vertex : vertices) {
-			System.out.println(vertex);
-		}
-
-		// Printing normals
-		System.out.println("Normals:");
-		for (Vector3f normal : normals) {
-			System.out.println(normal);
-		}
-
-		// Printing triangles
-		System.out.println("Triangles:");
-		for (Point3i triangle : triangles) {
-			System.out.println(triangle);
-		}
+		// System.out.println("Vertices:");
+		// for (Point3f vertex : vertices) {
+		// 	System.out.println(vertex);
+		// }
+		// System.out.println("Normals:");
+		// for (Vector3f normal : normals) {
+		// 	System.out.println(normal);
+		// }
+		// System.out.println("Triangles:");
+		// for (Point3i triangle : triangles) {
+		// 	System.out.println(triangle);
+		// }
 		System.out.println("-------------------------");
 
 		//Build the mesh data arrays from the static mesh data
@@ -100,14 +97,9 @@ public class Cylinder extends Shape {
 
 	int generateFacets(float flatnessTolerance)
 	{
-		
-		int numFacets = (int) (Math.PI / Math.asin((1-flatnessTolerance)/2));
-		
-		//ensure even
-		numFacets = numFacets % 2 == 0 ? numFacets : numFacets + 1;
-		//ensure >= 6
-		numFacets = Math.max(6, numFacets);
+		//todo .014 should be 20 facets
 
+		int numFacets = 20;
 		return numFacets;
 	}
 
@@ -126,7 +118,7 @@ public class Cylinder extends Shape {
 			//add origin as last point
 			if (i == numVertices-1)
 			{
-				vertices[i] = new Point3f(0, -1, 0);
+				vertices[i] = new Point3f(0, -CYLINDER_HEIGHT/2, 0);
 			}
 		}
 
@@ -140,7 +132,7 @@ public class Cylinder extends Shape {
 			//add origin as last point
 			if (i == (numVertices*2)-1)
 			{
-				vertices[i] = new Point3f(0, 1, 0);
+				vertices[i] = new Point3f(0, CYLINDER_HEIGHT/2, 0);
 			}
 		}
 
@@ -221,16 +213,18 @@ public class Cylinder extends Shape {
 			int topVertex1 = i + (numFacets+1);
 			int topVertex2 = i + (numFacets+1) + 1;
 
-			// System.out.println("bottom index1: " + bottomVertex1 + " index2: " + bottomVertex2);
-			// System.out.println("top index1: " + topVertex1 + " index2: " + topVertex2);
-			// System.out.println("triangleIndex: " + triangleIndex);
-		
+			//ensure last triangle loops back
+			if (i == numFacets-1)
+			{
+				bottomVertex2 = 0;
+				topVertex2 = numFacets+1;
+			}
+
 			triangles[triangleIndex] = new Point3i(bottomVertex1, topVertex1, bottomVertex2);
 			triangleIndex++;
 			triangles[triangleIndex] = new Point3i(bottomVertex2, topVertex1, topVertex2);
 			triangleIndex++;
 
-			//todo ensure last triangle loops back
 		}
 
 		return triangles;
