@@ -169,8 +169,11 @@ public class Cylinder extends Shape {
 	}
 
 	Point3i[] generateTriangles(int numFacets)
-	{
-		Point3i[] triangles = new Point3i[numFacets*2];
+	{	
+		//numFacets triangles on the top
+		//numFacets triangles on the bottom
+		//numFacets*2 on sides (1 square for each facet, 2 triangles per square)
+		Point3i[] triangles = new Point3i[numFacets*2*2];
 
 		//generate triangles for bottom layer
 		int bottomOriginIndex = numFacets; 
@@ -191,8 +194,8 @@ public class Cylinder extends Shape {
 
 		//generate triangles for top layer
 		//start where the last section left off
-		int start = numFacets+1; 			  //7
-		int topOriginIndex = (numFacets*2)+1; //13
+		int start = numFacets+1;
+		int topOriginIndex = (numFacets*2)+1;
 		for (int i=start; i < topOriginIndex; i++) 
 		{
 			int vertex1 = i; 
@@ -207,6 +210,27 @@ public class Cylinder extends Shape {
 
 			// Create the triangle using the vertex indices, backwards to make it front facing
 			triangles[i-1] = new Point3i(vertex3, vertex2, vertex1);
+		}
+
+		//generate sides of triangle using existing vertices
+		int triangleIndex=numFacets*2;
+		for (int i = 0; i < numFacets; i++) {
+			int bottomVertex1 = i;
+			int bottomVertex2 = i + 1;
+
+			int topVertex1 = i + (numFacets+1);
+			int topVertex2 = i + (numFacets+1) + 1;
+
+			// System.out.println("bottom index1: " + bottomVertex1 + " index2: " + bottomVertex2);
+			// System.out.println("top index1: " + topVertex1 + " index2: " + topVertex2);
+			// System.out.println("triangleIndex: " + triangleIndex);
+		
+			triangles[triangleIndex] = new Point3i(bottomVertex1, topVertex1, bottomVertex2);
+			triangleIndex++;
+			triangles[triangleIndex] = new Point3i(bottomVertex2, topVertex1, topVertex2);
+			triangleIndex++;
+
+			//todo ensure last triangle loops back
 		}
 
 		return triangles;
