@@ -22,6 +22,10 @@ public class Cylinder extends Shape {
 	 */
 	public Cylinder() {}
 
+	//? Questions
+	//should we be duplicating the vertices or reusing vertices for the sides of the cylinder
+	//and what should the normals be for the vertices
+
 	/**
 	 * @see modeler.shape.Shape#buildMesh()
 	 */
@@ -36,6 +40,7 @@ public class Cylinder extends Shape {
 		}
 
 		//get the flatness tolerance
+		//todo recalculate these when the slider changes
 		float flatnessTolerance = Shape.TOLERANCE;
 
 		//do all these calculations to get triangle points around cylinder
@@ -49,19 +54,19 @@ public class Cylinder extends Shape {
 		System.out.println("-------------------------");
 		System.out.println("flatnessTolerance: " + flatnessTolerance);
 		System.out.println("numFacets: " + numFacets);
-		// System.out.println("Vertices:");
-		// for (Point3f vertex : vertices) {
-		// 	System.out.println(vertex);
-		// }
+		System.out.println("Vertices:");
+		for (Point3f vertex : vertices) {
+			System.out.println(vertex);
+		}
 		System.out.println("Normals:");
 		for (Vector3f normal : normals) {
 			System.out.println(normal);
 		}
-		// System.out.println("Triangles:");
-		// for (Point3i triangle : triangles) {
-		// 	System.out.println(triangle);
-		// }
-		// System.out.println("-------------------------");
+		System.out.println("Triangles:");
+		for (Point3i triangle : triangles) {
+			System.out.println(triangle);
+		}
+		System.out.println("-------------------------");
 
 		//Build the mesh data arrays from the static mesh data
 		int vertLength = vertices.length;
@@ -98,7 +103,23 @@ public class Cylinder extends Shape {
 	int generateFacets(float flatnessTolerance)
 	{
 		//todo .014 should be 20 facets
-		int numFacets = 20;
+		//todo fix this process
+		
+		//numFacets must be even integers that result in flattness less than flatness tolerance
+
+		int numFacets = 6;
+		float flatness = 0.0f;
+		//loop through until we find an N that produces flatness greater than the flatnessTolerance
+		while (flatness < flatnessTolerance)
+		{
+			//1 - cos(360/2n)
+			flatness = 1 - cos(360/2*numFacets);
+			//increment
+			numFacets= numFacets+2;
+		}
+
+		//flatness exceeded, go back a step and be done
+		numFacets = numFacets-2;
 
 		return numFacets;
 	}
@@ -107,8 +128,8 @@ public class Cylinder extends Shape {
 	{	
 		int numVertices = numFacets+1;
 		double angleIncrement = 360.0f / numFacets;
-		Point3f[] vertices = new Point3f[numVertices*2];
-		// Point3f[] vertices = new Point3f[numVertices*2*2];
+		//Point3f[] vertices = new Point3f[numVertices*2];
+		Point3f[] vertices = new Point3f[numVertices*2*2];
 
 		// Calculate vertices for the bottom layer
 		for (int i=0; i < numVertices; i++) {
@@ -137,9 +158,9 @@ public class Cylinder extends Shape {
 			}
 		}
 
-		// // Duplicate the vertices for the bottom and top layers to be used for sides
-		// System.arraycopy(vertices, 0, vertices, numVertices * 2, numVertices);
-		// System.arraycopy(vertices, numVertices, vertices, numVertices * 3, numVertices);
+		// Duplicate the vertices for the bottom and top layers to be used for sides
+		System.arraycopy(vertices, 0, vertices, numVertices * 2, numVertices);
+		System.arraycopy(vertices, numVertices, vertices, numVertices * 3, numVertices);
 
 		return vertices;
 	}
@@ -148,24 +169,23 @@ public class Cylinder extends Shape {
 	{
 		int numNormals = numFacets+1;
 		double angleIncrement = 360.0f / numFacets;
-		Vector3f[] normals = new Vector3f[numNormals*2];
-
-		//Vector3f[] normals = new Vector3f[numNormals*2*2];
+		//Vector3f[] normals = new Vector3f[numNormals*2];
+		Vector3f[] normals = new Vector3f[numNormals*2*2];
 
 		//generate normals for bottom layer
 		Vector3f bottomNormal = new Vector3f(0.0f, -1.0f, 0.0f);
 		for (int i = 0; i < numNormals; i++) 
 		{
-            //normals[i] = bottomNormal;
-			double angle= i * angleIncrement;
-			float x = CYLINDER_RADIUS * cos(Math.toRadians(angle));
-			float z = CYLINDER_RADIUS * sin(Math.toRadians(angle));
-			normals[i] = new Vector3f(x, -1.0f, z);
-			if (i == numNormals-1)
-			{
-				normals[i] = bottomNormal;
-			}
-			normals[i].normalize();
+            normals[i] = bottomNormal;
+			// double angle= i * angleIncrement;
+			// float x = CYLINDER_RADIUS * cos(Math.toRadians(angle));
+			// float z = CYLINDER_RADIUS * sin(Math.toRadians(angle));
+			// normals[i] = new Vector3f(x, -1.0f, z);
+			// if (i == numNormals-1)
+			// {
+			// 	normals[i] = bottomNormal;
+			// }
+			// normals[i].normalize();
         }
 
 		//generate normals for top layer
@@ -173,37 +193,37 @@ public class Cylinder extends Shape {
 		Vector3f topNormal = new Vector3f(0.0f, 1.0f, 0.0f);
 		for (int i = numNormals; i < numNormals*2; i++) 
 		{
-			//normals[i] = topNormal;
-			double angle= (i-numNormals) * angleIncrement;
-			float x = CYLINDER_RADIUS * cos(Math.toRadians(angle));
-			float z = CYLINDER_RADIUS * sin(Math.toRadians(angle));
-			normals[i] = new Vector3f(x, 1.0f, z);
-			if (i == numNormals*2-1)
-			{	
-				normals[i] = topNormal;
-			}
-			normals[i].normalize();
+			normals[i] = topNormal;
+			// double angle= (i-numNormals) * angleIncrement;
+			// float x = CYLINDER_RADIUS * cos(Math.toRadians(angle));
+			// float z = CYLINDER_RADIUS * sin(Math.toRadians(angle));
+			// normals[i] = new Vector3f(x, 1.0f, z);
+			// if (i == numNormals*2-1)
+			// {	
+			// 	normals[i] = topNormal;
+			// }
+			// normals[i].normalize();
 		}
 		
-		// //generate normals for side vertices (bottom layer)
-		// for (int i = numNormals*2; i < numNormals*3; i++) 
-		// {
-		// 	double angle= (i-numNormals*2) * angleIncrement;
-		// 	float x = CYLINDER_RADIUS * cos(Math.toRadians(angle));
-		// 	float z = CYLINDER_RADIUS * sin(Math.toRadians(angle));
-		// 	normals[i] = new Vector3f(x, 0.0f, z);
-		// 	normals[i].normalize();
-		// }
+		//generate normals for side vertices (bottom layer)
+		for (int i = numNormals*2; i < numNormals*3; i++) 
+		{
+			double angle= (i-numNormals*2) * angleIncrement;
+			float x = CYLINDER_RADIUS * cos(Math.toRadians(angle));
+			float z = CYLINDER_RADIUS * sin(Math.toRadians(angle));
+			normals[i] = new Vector3f(x, 0.0f, z);
+			normals[i].normalize();
+		}
 
-		// //generate normals for side vertices (top layer)
-    	// for (int i = numNormals*3; i < numNormals*4; i++) 
-		// {
-		// 	double angle=(i-numNormals*3) * angleIncrement;
-		// 	float x = CYLINDER_RADIUS * cos(Math.toRadians(angle));
-		// 	float z = CYLINDER_RADIUS * sin(Math.toRadians(angle));
-		// 	normals[i] = new Vector3f(x, 0.0f, z);
-		// 	normals[i].normalize();
-    	// }
+		//generate normals for side vertices (top layer)
+    	for (int i = numNormals*3; i < numNormals*4; i++) 
+		{
+			double angle=(i-numNormals*3) * angleIncrement;
+			float x = CYLINDER_RADIUS * cos(Math.toRadians(angle));
+			float z = CYLINDER_RADIUS * sin(Math.toRadians(angle));
+			normals[i] = new Vector3f(x, 0.0f, z);
+			normals[i].normalize();
+    	}
 
 		return normals;
 	}
@@ -249,50 +269,50 @@ public class Cylinder extends Shape {
 			triangles[i-1] = new Point3i(vertex3, vertex2, vertex1);
 		}
 
-		//generate sides of triangle using existing vertices
-		int triangleIndex=numFacets*2;
-		for (int i = 0; i < numFacets; i++) {
-			int bottomVertex1 = i;
-			int bottomVertex2 = i + 1;
+		// //generate sides of triangle using existing vertices
+		// int triangleIndex=numFacets*2;
+		// for (int i = 0; i < numFacets; i++) {
+		// 	int bottomVertex1 = i;
+		// 	int bottomVertex2 = i + 1;
 
-			int topVertex1 = i + (numFacets+1);
-			int topVertex2 = i + (numFacets+1) + 1;
-
-			//ensure last triangle loops back
-			if (i == numFacets-1)
-			{
-				bottomVertex2 = 0;
-				topVertex2 = numFacets+1;
-			}
-
-			triangles[triangleIndex] = new Point3i(bottomVertex1, topVertex1, bottomVertex2);
-			triangleIndex++;
-			triangles[triangleIndex] = new Point3i(bottomVertex2, topVertex1, topVertex2);
-			triangleIndex++;
-
-		}
-
-		//generate sides of triangle using duplicated vertices
-		//account for the extra origin vertices
-		// int sideStart = numFacets * 2;
-		// for (int i = sideStart; i < numFacets*3; i++)
-		// {
-		// 	int bottomVertex1 = i+2;
-		// 	int bottomVertex2 = i+2+1;
-
-		// 	int topVertex1 = i+(numFacets+3);
-		// 	int topVertex2 = i+(numFacets+3)+1;
+		// 	int topVertex1 = i + (numFacets+1);
+		// 	int topVertex2 = i + (numFacets+1) + 1;
 
 		// 	//ensure last triangle loops back
-		// 	if (i == numFacets*3-1)
+		// 	if (i == numFacets-1)
 		// 	{
-		// 		bottomVertex2 = sideStart+2;
-		// 		topVertex2 = sideStart+(numFacets+3);
+		// 		bottomVertex2 = 0;
+		// 		topVertex2 = numFacets+1;
 		// 	}
 
-		// 	triangles[i] = new Point3i(bottomVertex1, topVertex1, bottomVertex2);
-		// 	triangles[i + numFacets] = new Point3i(bottomVertex2, topVertex1, topVertex2);
+		// 	triangles[triangleIndex] = new Point3i(bottomVertex1, topVertex1, bottomVertex2);
+		// 	triangleIndex++;
+		// 	triangles[triangleIndex] = new Point3i(bottomVertex2, topVertex1, topVertex2);
+		// 	triangleIndex++;
+
 		// }
+
+		// generate sides of triangle using duplicated vertices
+		// account for the extra origin vertices
+		int sideStart = numFacets * 2;
+		for (int i = sideStart; i < numFacets*3; i++)
+		{
+			int bottomVertex1 = i+2;
+			int bottomVertex2 = i+2+1;
+
+			int topVertex1 = i+(numFacets+3);
+			int topVertex2 = i+(numFacets+3)+1;
+
+			//ensure last triangle loops back
+			if (i == numFacets*3-1)
+			{
+				bottomVertex2 = sideStart+2;
+				topVertex2 = sideStart+(numFacets+3);
+			}
+
+			triangles[i] = new Point3i(bottomVertex1, topVertex1, bottomVertex2);
+			triangles[i + numFacets] = new Point3i(bottomVertex2, topVertex1, topVertex2);
+		}
 
 		return triangles;
 	}
