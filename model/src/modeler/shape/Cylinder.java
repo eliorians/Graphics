@@ -53,10 +53,10 @@ public class Cylinder extends Shape {
 		// for (Point3f vertex : vertices) {
 		// 	System.out.println(vertex);
 		// }
-		// System.out.println("Normals:");
-		// for (Vector3f normal : normals) {
-		// 	System.out.println(normal);
-		// }
+		System.out.println("Normals:");
+		for (Vector3f normal : normals) {
+			System.out.println(normal);
+		}
 		// System.out.println("Triangles:");
 		// for (Point3i triangle : triangles) {
 		// 	System.out.println(triangle);
@@ -151,27 +151,37 @@ public class Cylinder extends Shape {
 		Vector3f[] normals = new Vector3f[numNormals*2];
 
 		//Vector3f[] normals = new Vector3f[numNormals*2*2];
-		//Vector3f bottomNormal = new Vector3f(0.0f, -1.0f, 0.0f);
-		//Vector3f topNormal = new Vector3f(0.0f, 1.0f, 0.0f);
 
 		//generate normals for bottom layer
-		for (int i = 0; i < numNormals; i++) {
+		Vector3f bottomNormal = new Vector3f(0.0f, -1.0f, 0.0f);
+		for (int i = 0; i < numNormals; i++) 
+		{
             //normals[i] = bottomNormal;
 			double angle= i * angleIncrement;
 			float x = CYLINDER_RADIUS * cos(Math.toRadians(angle));
 			float z = CYLINDER_RADIUS * sin(Math.toRadians(angle));
-			normals[i] = new Vector3f(x, 0.0f, z);
+			normals[i] = new Vector3f(x, -1.0f, z);
+			if (i == numNormals-1)
+			{
+				normals[i] = bottomNormal;
+			}
 			normals[i].normalize();
         }
 
 		//generate normals for top layer
 		//start where the last section left off
-		for (int i = numNormals; i < numNormals*2; i++) {
+		Vector3f topNormal = new Vector3f(0.0f, 1.0f, 0.0f);
+		for (int i = numNormals; i < numNormals*2; i++) 
+		{
 			//normals[i] = topNormal;
 			double angle= (i-numNormals) * angleIncrement;
 			float x = CYLINDER_RADIUS * cos(Math.toRadians(angle));
 			float z = CYLINDER_RADIUS * sin(Math.toRadians(angle));
-			normals[i] = new Vector3f(x, 0.0f, z);
+			normals[i] = new Vector3f(x, 1.0f, z);
+			if (i == numNormals*2-1)
+			{	
+				normals[i] = topNormal;
+			}
 			normals[i].normalize();
 		}
 		
