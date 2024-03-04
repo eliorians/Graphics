@@ -4,6 +4,8 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
 import javax.vecmath.Vector3f;
 
+import jgl.glu.nurbs_nurbs;
+
 /**
  * @author ags
  */
@@ -17,6 +19,10 @@ public class Cylinder extends Shape {
 	private transient static Mesh cylinderMesh;
 
 
+	//? Questions
+	// lighting is off,,, -> diff checker but why???
+	// also the facets are wrong
+
 	/**
 	 * Required for IO
 	 */
@@ -28,12 +34,6 @@ public class Cylinder extends Shape {
 	public void buildMesh() 
 	{
 		// TODO: Part 2: Implement this method	
-
-		//Do nothing if the mesh has already been built
-		if(cylinderMesh != null) {
-			mesh = cylinderMesh;
-			return;
-		}
 
 		//get the flatness tolerance
 		//todo recalculate these when the slider changes
@@ -105,19 +105,24 @@ public class Cylinder extends Shape {
 
 		int numFacets = 6;
 		float flatness = 0.0f;
-		//loop through until we find an N that produces flatness greater than the flatnessTolerance
-		while (flatness < flatnessTolerance)
+		//loop through until we find a numFacets that produces flatness greater than the flatnessTolerance. use one step less than that (greatest that doesnt exceed)
+		System.out.println("");
+		while (flatness < flatnessTolerance) 
 		{
-			//1 - cos(360/2n)
-			flatness = 1 - cos((Math.toRadians(360.f/(2*numFacets))));
-			//increment
-			numFacets= numFacets+2;
-			System.out.println(flatness);
-			System.out.println(numFacets);
-		}
+			System.out.println("numFacets: " + numFacets);
 
-		//flatness exceeded, go back a step and be done
-		numFacets = numFacets-2;
+			//flatness = 1 - cos(angle)
+			flatness = 1 - cos(Math.toRadians(360.0f / numFacets / 2));
+			//inc by 2 for even facets
+			numFacets += 2;
+
+			System.out.println("flatness: " + flatness);
+			System.out.println("");
+		}
+		System.out.println("loop end");
+
+		numFacets -= 2;
+		//numFacets=20;
 		return numFacets;
 	}
 
@@ -247,7 +252,8 @@ public class Cylinder extends Shape {
 		}
 
 		// generate sides of triangle using duplicated vertices
-		// account for the extra origin vertices with the +2's
+		//verteces for the bottom (numFacets*2) come before the vertices for the top (numFacets*3)
+		// account for the extra origin vertices with the +2's / +3's
 		int sideStart = numFacets * 2;
 		for (int i = sideStart; i < numFacets*3; i++)
 		{
