@@ -91,10 +91,18 @@ public class Sphere extends Shape {
 
 	int generateFacets(float flatnessTolerance)
 	{
-		//todo .014 should be 20 facets
-		//todo fix this process
+		int numFacets = 6;
+		float flatness = 99999999f;
+		//loop through until we find a numFacets that produces flatness greater than the flatnessTolerance. use one step less than that (greatest that doesnt exceed)
+		while (flatness > flatnessTolerance) 
+		{
+			//flatness = 1 - cos(angle)
+			flatness = 1 - cos(Math.toRadians(360.0f / numFacets / 2));
+			//inc by 2 for even facets
+			numFacets += 2;
+		}
 
-		int numFacets = 20;
+		numFacets -= 2;
 		return numFacets;
 	}
 

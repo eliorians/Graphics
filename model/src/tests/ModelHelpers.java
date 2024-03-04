@@ -196,9 +196,9 @@ public class ModelHelpers {
 		MainFrame m = new MainFrame(false);
 		m.setVisible(true);
 		
-		try { Thread.sleep(500); } finally {};
+		try { Thread.sleep(1500); } finally {};
 		m.openTree(filePath);
-		try { Thread.sleep(500); } finally {};
+		try { Thread.sleep(1500); } finally {};
 		
 		compareImages(m, test);
 		
