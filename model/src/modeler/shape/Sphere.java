@@ -96,25 +96,37 @@ public class Sphere extends Shape {
 		}
 
 		numFacets -= 2;
-		numFacets = 6;
+		//numFacets = 6;
 		return numFacets;
 	}
 
 	Point3f[] generateVertices(int numFacets)
 	{	
-		int numVertices = numFacets+1;
+
 		
+		//x = cos(lat) * cos(lon)
+		//y = sin(lat)
+		//z = - cos(lat) * sin(lon) 
+
+		//radius = cos(lat)
+
+
+		int numVertices = numFacets+1;
+		int numLayers = (int)(180.0 / (numFacets * 2)) + 1;
+		//numLayers = 3;
+		int longitude = 0, lattitude = 0;
+
 		Point3f[] vertices = new Point3f[numVertices*2*2];
 		
 		int index = 0;
 		for (int i = 0; i <= numFacets; i++) {
-            for (int j = 0; j <= numFacets; j++) {
+            for (int j = 0; j <= numLayers; j++) {
                 double theta = i * Math.PI / numFacets;
                 double phi = j * 2 * Math.PI / numFacets;
 
-                float x = SPHERE_RADIUS * sin(theta) * cos(phi);
-                float y = SPHERE_RADIUS * cos(theta);
-                float z = SPHERE_RADIUS * sin(theta) * sin(phi);
+                float x = SPHERE_RADIUS * cos(longitude);
+                float y = SPHERE_RADIUS * sin(lattitude);
+                float z = SPHERE_RADIUS * -sin(longitude);
 
                 vertices[index++] = new Point3f(x, y, z);
             }

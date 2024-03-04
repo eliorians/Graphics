@@ -35,39 +35,37 @@ public class Cylinder extends Shape {
 		// TODO: Part 2: Implement this method	
 
 		//get the flatness tolerance
-		//todo recalculate these when the slider changes
 		float flatnessTolerance = Shape.TOLERANCE;
 
 		//do all these calculations to get triangle points around cylinder
 		int numFacets = generateFacets(flatnessTolerance);
-
 		Point3f[] vertices = generateVertices(numFacets);
 		Vector3f[] normals = generateNormals(numFacets);
 		Point3i[] triangles = generateTriangles(numFacets);
 
 		//Print Result of Generating
-		System.out.println("-------------------------");
-		System.out.println("flatnessTolerance: " + flatnessTolerance);
-		System.out.println("numFacets: " + numFacets);
-		System.out.println("Vertices:");
-		int count = 0;
-		for (Point3f vertex : vertices) {
-			System.out.println("["+ count + "] " + vertex);
-			count++;
-		}
-		count = 0;
-		System.out.println("Normals:");
-		for (Vector3f normal : normals) {
-			System.out.println("["+ count + "] " + normal);
-			count++;
-		}
-		count = 0;
-		System.out.println("Triangles:");
-		for (Point3i triangle : triangles) {
-			System.out.println("["+ count + "] " + triangle);
-			count++;
-		}
-		System.out.println("-------------------------");
+		// System.out.println("-------------------------");
+		// System.out.println("flatnessTolerance: " + flatnessTolerance);
+		// System.out.println("numFacets: " + numFacets);
+		// System.out.println("Vertices:");
+		// int count = 0;
+		// for (Point3f vertex : vertices) {
+		// 	System.out.println("["+ count + "] " + vertex);
+		// 	count++;
+		// }
+		// count = 0;
+		// System.out.println("Normals:");
+		// for (Vector3f normal : normals) {
+		// 	System.out.println("["+ count + "] " + normal);
+		// 	count++;
+		// }
+		// count = 0;
+		// System.out.println("Triangles:");
+		// for (Point3i triangle : triangles) {
+		// 	System.out.println("["+ count + "] " + triangle);
+		// 	count++;
+		// }
+		// System.out.println("-------------------------");
 
 		//Build the mesh data arrays from the static mesh data
 		int vertLength = vertices.length;
@@ -115,6 +113,7 @@ public class Cylinder extends Shape {
 		}
 
 		numFacets -= 2;
+		//numFacets = 6;
 		return numFacets;
 	}
 
@@ -186,6 +185,10 @@ public class Cylinder extends Shape {
 			float x = CYLINDER_RADIUS * cos(Math.toRadians(angle));
 			float z = CYLINDER_RADIUS * sin(Math.toRadians(angle));
 			normals[i] = new Vector3f(x, 0.0f, z);
+			if (i == (numNormals*3)-1)
+			{
+				normals[i] = new Vector3f(0, -CYLINDER_HEIGHT/2, 0);
+			}
 		}
 
 		//generate normals for side vertices (top layer)
@@ -195,6 +198,10 @@ public class Cylinder extends Shape {
 			float x = CYLINDER_RADIUS * cos(Math.toRadians(angle));
 			float z = CYLINDER_RADIUS * sin(Math.toRadians(angle));
 			normals[i] = new Vector3f(x, 0.0f, z);
+			if (i == (numNormals*4)-1)
+			{
+				normals[i] = new Vector3f(0, CYLINDER_HEIGHT/2, 0);
+			}
     	}
 
 		return normals;
@@ -263,7 +270,6 @@ public class Cylinder extends Shape {
 			triangles[i] = new Point3i(bottomVertex1, topVertex1, bottomVertex2);
 			triangles[i + numFacets] = new Point3i(bottomVertex2, topVertex1, topVertex2);
 		}
-
 		return triangles;
 	}
 }
