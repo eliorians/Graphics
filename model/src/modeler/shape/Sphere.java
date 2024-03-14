@@ -35,12 +35,12 @@ public class Sphere extends Shape {
 		Point3i[] triangles = generateTriangles(numFacets);
 
 		//Print Result of Generating
-		System.out.println("-------------------------");
-		System.out.println("Vertices Length: " + vertices.length);
-		System.out.println("Normals Length: " + normals.length);
-		System.out.println("Triangles Length: " + triangles.length);
-		System.out.println("flatnessTolerance: " + flatnessTolerance);
-		System.out.println("numFacets: " + numFacets);
+		// System.out.println("-------------------------");
+		// System.out.println("Vertices Length: " + vertices.length);
+		// System.out.println("Normals Length: " + normals.length);
+		// System.out.println("Triangles Length: " + triangles.length);
+		// System.out.println("flatnessTolerance: " + flatnessTolerance);
+		// System.out.println("numFacets: " + numFacets);
 		// System.out.println("Vertices:");
 		// for (Point3f vertex : vertices) {
 		// 	System.out.println(vertex);
@@ -53,7 +53,7 @@ public class Sphere extends Shape {
 		// for (Point3i triangle : triangles) {
 		// 	System.out.println(triangle);
 		// }
-		System.out.println("-------------------------");
+		// System.out.println("-------------------------");
 
 
 		//Build the mesh data arrays from the static mesh data
@@ -158,41 +158,14 @@ public class Sphere extends Shape {
 	Vector3f[] generateNormals(int numFacets)
 	{
 		
-		int latitude = numFacets;		// top/bottom
-		int longitude = numFacets*2;	// left/right
-		Vector3f[][] normals2D = new Vector3f[latitude][longitude];
+		Point3f[] vertices = generateVertices(numFacets);
+        Vector3f[] normals = new Vector3f[vertices.length];
 
-		float latAngleIncrement = 180.0f / latitude;
-    	float lonAngleIncrement = 360.0f / longitude;
-		
-		for (int i = 0; i < latitude; i++) 
-		{
-			//calc latitude angle from -90 to 90
-			float lat = latAngleIncrement * i - 90.0f;
-
-			for (int j = 0; j < longitude; j++) 
-			{
-				//calc longitude angle from -180 to 180
-				float lon = lonAngleIncrement * j - 180.0f;
-
-				float x = cos(Math.toRadians(lat)) * cos(Math.toRadians(lon));
-				float y = sin(Math.toRadians(lat));
-				float z = -cos(Math.toRadians(lat)) * sin(Math.toRadians(lon));
-
-                normals2D[i][j] = new Vector3f(x, y, z);
-            }
+        for (int i = 0; i < vertices.length; i++) {
+            normals[i] = new Vector3f(vertices[i]);
         }
 
-		// convert 2D array to 1D array
-		int index = 0;
-        Vector3f[] normals = new Vector3f[latitude * longitude];
-        for (int i = 0; i < latitude; i++) {
-            for (int j = 0; j < longitude; j++) {
-                normals[index++] = normals2D[i][j];
-            }
-        }
-
-		return normals;
+        return normals;
 	}
 
 	Point3i[] generateTriangles(int numFacets)
@@ -216,13 +189,8 @@ public class Sphere extends Shape {
 		}
 
 		//convert to array
-		Point3i[] triangles = triangleList.toArray(new Point3i[triangleList.size()]);
-		
-		//output
-		// for (Point3i triangle : triangleList) {
-		// 	System.out.println("(" + triangle.x + ", " + triangle.y + ", " + triangle.z + ")");
-		// }		
-		
+		Point3i[] triangles = triangleList.toArray(new Point3i[triangleList.size()]);		
+
 		return triangles;
 	}
 }
