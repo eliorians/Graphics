@@ -115,7 +115,7 @@ public class Sphere extends Shape {
 		int longitude = numFacets*2;	// left/right
 		Point3f[][] vertices2D = new Point3f[latitude][longitude];
 
-		float latAngleIncrement = 180.0f / latitude;
+		float latAngleIncrement = 180.0f / (latitude - 1);
     	float lonAngleIncrement = 360.0f / longitude;
 		
 		for (int i = 0; i < latitude; i++) {
@@ -143,7 +143,7 @@ public class Sphere extends Shape {
             }
         }
 
-		// output 2d array
+		// test output
 		// for (int i = 0; i < vertices2D.length; i++) {
 		// 	for (int j = 0; j < vertices2D[i].length; j++) {
 		// 		System.out.print("(" + vertices2D[i][j].x + ", " + vertices2D[i][j].y + ", " + vertices2D[i][j].z + ") ");
