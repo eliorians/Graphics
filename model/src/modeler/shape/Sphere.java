@@ -23,7 +23,6 @@ public class Sphere extends Shape {
 	 * @see modeler.shape.Shape#buildMesh()
 	 */
 	public void buildMesh() {
-		//TODO: Part 2: Implement this method.
 
 		//get the flatness tolerance
 		float flatnessTolerance = Shape.TOLERANCE;
@@ -111,16 +110,18 @@ public class Sphere extends Shape {
 		int longitude = numFacets;			// left/right
 		Point3f[][] vertices2D = new Point3f[latitude][longitude];
 
-		float latAngleIncrement = 180.0f / (latitude-1);
-    	float lonAngleIncrement = 360.0f / (longitude);
+		double latAngleIncrement = 180.0f / (latitude-1);
+    	double lonAngleIncrement = 360.0f / longitude;
 		
-		for (int i = 0; i < latitude; i++) {
+		for (int i = 0; i < latitude; i++) 
+		{
 			//calc latitude angle from -90 to 90
-			float lat = latAngleIncrement * i - 90.0f;
+			double lat = latAngleIncrement * i - 90.0f;
 
-            for (int j = 0; j < longitude; j++) {
+            for (int j = 0; j < longitude; j++) 
+			{
 				//calc longitude angle from -180 to 180
-				float lon = lonAngleIncrement * j - 180.0f;
+				double lon = lonAngleIncrement * j - 180.0f;
 
 				float x = cos(Math.toRadians(lat)) * cos(Math.toRadians(lon));
 				float y = sin(Math.toRadians(lat));
@@ -130,7 +131,7 @@ public class Sphere extends Shape {
             }
         }
 
-		// convert 2D array to 1D array
+		// flatten 2d array to 1d
 		int index = 0;
         Point3f[] vertices = new Point3f[latitude * longitude];
         for (int i = 0; i < latitude; i++) {
@@ -168,14 +169,21 @@ public class Sphere extends Shape {
         int longitude = numFacets;
 		List<Point3i> triangleList = new ArrayList<>();
 
-		// Generate triangles within each quad except at poles
 		for (int i = 0; i < latitude - 1; i++) {
-			for (int j = 0; j < longitude - 1; j++) {
+			for (int j = 0; j < longitude; j++) {
 				int currentVertex = i * longitude + j;
 				int nextRowVertex = (i + 1) * longitude + j;
-
-				triangleList.add(new Point3i(currentVertex, currentVertex + 1, nextRowVertex));
-				triangleList.add(new Point3i(nextRowVertex + 1, nextRowVertex, currentVertex + 1));
+	
+				if ((currentVertex + 1) % longitude != 0) 
+				{
+					triangleList.add(new Point3i(currentVertex, currentVertex + 1, nextRowVertex));
+					triangleList.add(new Point3i(currentVertex + 1, nextRowVertex + 1, nextRowVertex));
+				} 
+				else 
+				{
+					triangleList.add(new Point3i(currentVertex, currentVertex - longitude + 1, nextRowVertex));
+					triangleList.add(new Point3i(currentVertex - longitude + 1, nextRowVertex - longitude + 1, nextRowVertex));
+				}
 			}
 		}
 
@@ -185,3 +193,4 @@ public class Sphere extends Shape {
 		return triangles;
 	}
 }
+
