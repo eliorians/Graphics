@@ -34,7 +34,7 @@ public class Sphere extends Shape {
 		Vector3f[] normals = generateNormals(numFacets, vertices);
 		Point3i[] triangles = generateTriangles(numFacets);
 
-		//Print Result of Generating
+		//testing output
 		// System.out.println("-------------------------");
 		// System.out.println("Vertices Length: " + vertices.length);
 		// System.out.println("Normals Length: " + normals.length);
@@ -107,17 +107,12 @@ public class Sphere extends Shape {
 
 	Point3f[] generateVertices(int numFacets)
 	{	
-		//x = cos(lat) * cos(lon)
-		//y = sin(lat)
-		//z = - cos(lat) * sin(lon) 
-		//radius = cos(lat)
-
-		int latitude = numFacets;		// top/bottom
-		int longitude = numFacets*2;	// left/right
+		int latitude = numFacets/2+1;		// top/bottom +1 to include both poles
+		int longitude = numFacets;			// left/right
 		Point3f[][] vertices2D = new Point3f[latitude][longitude];
 
 		float latAngleIncrement = 180.0f / (latitude-1);
-    	float lonAngleIncrement = 360.0f / (longitude-1);
+    	float lonAngleIncrement = 360.0f / (longitude);
 		
 		for (int i = 0; i < latitude; i++) {
 			//calc latitude angle from -90 to 90
@@ -145,13 +140,13 @@ public class Sphere extends Shape {
         }
 
 		//test output
-		// for (int i = 0; i < vertices2D.length; i++) {
-		// 	for (int j = 0; j < vertices2D[i].length; j++) {
-		// 		System.out.print("(" + vertices2D[i][j].x + ", " + vertices2D[i][j].y + ", " + vertices2D[i][j].z + ") ");
-		// 	}
-		// 	System.out.println("line end");
-		// 	System.out.println();
-		// }
+		for (int i = 0; i < vertices2D.length; i++) {
+			for (int j = 0; j < vertices2D[i].length; j++) {
+				System.out.print("(" + vertices2D[i][j].x + ", " + vertices2D[i][j].y + ", " + vertices2D[i][j].z + ") ");
+			}
+			System.out.println("line end");
+			System.out.println();
+		}
 
 		return vertices;
 	}
@@ -169,21 +164,18 @@ public class Sphere extends Shape {
 
 	Point3i[] generateTriangles(int numFacets)
 	{	
-		int latitude = numFacets;
-        int longitude = numFacets * 2;
+		int latitude = numFacets/2+1;
+        int longitude = numFacets;
 		List<Point3i> triangleList = new ArrayList<>();
-        
-		for (int i = 0; i < latitude-1; i++) 
-		{
-			for (int j = 0; j < longitude-1; j++) 
-			{
-				int currentVertex = i * longitude + j;
-				int nextVertex = currentVertex + 1;
-				int nextRowVertex = currentVertex + longitude;
-				int nextRowNextVertex = nextRowVertex + 1;
 
-				triangleList.add(new Point3i(currentVertex, nextVertex, nextRowVertex));
-				triangleList.add(new Point3i(nextVertex, nextRowNextVertex, nextRowVertex));
+		// Generate triangles within each quad except at poles
+		for (int i = 0; i < latitude - 1; i++) {
+			for (int j = 0; j < longitude - 1; j++) {
+				int currentVertex = i * longitude + j;
+				int nextRowVertex = (i + 1) * longitude + j;
+
+				triangleList.add(new Point3i(currentVertex, currentVertex + 1, nextRowVertex));
+				triangleList.add(new Point3i(nextRowVertex + 1, nextRowVertex, currentVertex + 1));
 			}
 		}
 
