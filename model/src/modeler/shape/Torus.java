@@ -3,6 +3,7 @@ package modeler.shape;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.w3c.dom.Element;
 import javax.vecmath.Point3f;
 import javax.vecmath.Point3i;
 import javax.vecmath.Vector3f;
@@ -10,11 +11,20 @@ import javax.vecmath.Vector3f;
 public class Torus extends Shape {
 	
 	private transient static Mesh torusMesh;
+
+	// aspect ratio = R / r
+	protected float aspectRatio = 2.333f;
 	
 	/**
 	 * Required for IO
 	 */
 	public Torus() {}
+
+	@Override
+	public void readXMLData(Element node) {
+		super.readXMLData(node);
+		aspectRatio = Float.parseFloat(node.getAttribute("aspectRatio"));
+	}
 
 	/**
 	 * @see modeler.shape.Shape#buildMesh()
@@ -103,26 +113,27 @@ public class Torus extends Shape {
 
 	Point3f[] generateVertices(int numFacets)
 	{	
-		int latitude = numFacets/2+1;		// top/bottom +1 to include both poles
+		int latitude = numFacets+1;			// top/bottom
 		int longitude = numFacets;			// left/right
 		Point3f[][] vertices2D = new Point3f[latitude][longitude];
 
-		double latAngleIncrement = 180.0f / (latitude-1);
+		float R = 1.0f;
+		float r = 0.3f;
+
+		double latAngleIncrement = 360.0f / latitude;
     	double lonAngleIncrement = 360.0f / longitude;
 				
 		for (int i = 0; i < latitude; i++) 
 		{
-			//calc latitude angle from -90 to 90
-			double lat = latAngleIncrement * i - 90.0f;
+			double lat = latAngleIncrement * i;
 
             for (int j = 0; j < longitude; j++) 
 			{
-				//calc longitude angle from -180 to 180
-				double lon = lonAngleIncrement * j - 180.0f;
+				double lon = lonAngleIncrement * j;
 
-				float x = cos(Math.toRadians(lat)) * cos(Math.toRadians(lon));
-				float y = sin(Math.toRadians(lat));
-				float z = -cos(Math.toRadians(lat)) * sin(Math.toRadians(lon));
+				float x = (R + r * cos(Math.toRadians(lon))) * cos(Math.toRadians(lat));
+				float y = (R + r * cos(Math.toRadians(lon))) * sin(Math.toRadians(lat));
+				float z = r * sin(Math.toRadians(lon));
 
                 vertices2D[i][j] = new Point3f(x, y, z);
             }
@@ -138,13 +149,13 @@ public class Torus extends Shape {
         }
 
 		//test output
-		// for (int i = 0; i < vertices2D.length; i++) {
-		// 	for (int j = 0; j < vertices2D[i].length; j++) {
-		// 		System.out.print("(" + vertices2D[i][j].x + ", " + vertices2D[i][j].y + ", " + vertices2D[i][j].z + ") ");
-		// 	}
-		// 	System.out.println("line end");
-		// 	System.out.println();
-		// }
+		for (int i = 0; i < vertices2D.length; i++) {
+			for (int j = 0; j < vertices2D[i].length; j++) {
+				System.out.print("(" + vertices2D[i][j].x + ", " + vertices2D[i][j].y + ", " + vertices2D[i][j].z + ") ");
+			}
+			System.out.println("line end");
+			System.out.println();
+		}
 
 		return vertices;
 	}
@@ -162,25 +173,19 @@ public class Torus extends Shape {
 
 	Point3i[] generateTriangles(int numFacets)
 	{	
-		int latitude = numFacets/2+1;
+		int latitude = numFacets;
         int longitude = numFacets;
 		List<Point3i> triangleList = new ArrayList<>();
 
 		for (int i = 0; i < latitude - 1; i++) {
 			for (int j = 0; j < longitude; j++) {
 				int currentVertex = i * longitude + j;
-				int nextRowVertex = (i + 1) * longitude + j;
+				int nextRowVertex = ((i + 1) % latitude) * longitude + j;
+				int nextColumnVertex = i * longitude + (j + 1) % longitude;
+				int nextRowColumnVertex = ((i + 1) % latitude) * longitude + (j + 1) % longitude;
 	
-				if ((currentVertex + 1) % longitude != 0) 
-				{
-					triangleList.add(new Point3i(currentVertex, currentVertex + 1, nextRowVertex));
-					triangleList.add(new Point3i(currentVertex + 1, nextRowVertex + 1, nextRowVertex));
-				} 
-				else 
-				{
-					triangleList.add(new Point3i(currentVertex, currentVertex - longitude + 1, nextRowVertex));
-					triangleList.add(new Point3i(currentVertex - longitude + 1, nextRowVertex - longitude + 1, nextRowVertex));
-				}
+				triangleList.add(new Point3i(currentVertex, nextRowVertex, nextColumnVertex));
+				triangleList.add(new Point3i(nextRowVertex, nextRowColumnVertex, nextColumnVertex));
 			}
 		}
 
