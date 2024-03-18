@@ -140,13 +140,13 @@ public class Sphere extends Shape {
         }
 
 		//test output
-		for (int i = 0; i < vertices2D.length; i++) {
-			for (int j = 0; j < vertices2D[i].length; j++) {
-				System.out.print("(" + vertices2D[i][j].x + ", " + vertices2D[i][j].y + ", " + vertices2D[i][j].z + ") ");
-			}
-			System.out.println("line end");
-			System.out.println();
-		}
+		// for (int i = 0; i < vertices2D.length; i++) {
+		// 	for (int j = 0; j < vertices2D[i].length; j++) {
+		// 		System.out.print("(" + vertices2D[i][j].x + ", " + vertices2D[i][j].y + ", " + vertices2D[i][j].z + ") ");
+		// 	}
+		// 	System.out.println("line end");
+		// 	System.out.println();
+		// }
 
 		return vertices;
 	}
