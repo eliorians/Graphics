@@ -118,9 +118,9 @@ public class Torus extends Shape {
 		Point3f[][] vertices2D = new Point3f[latitude][longitude];
 
 		float R = 1.0f;
-		float r = 0.3f;
+		float r = R /aspectRatio;
 
-		double latAngleIncrement = 360.0f / latitude;
+		double latAngleIncrement = 360.0f / (latitude-1);
     	double lonAngleIncrement = 360.0f / longitude;
 				
 		for (int i = 0; i < latitude; i++) 
@@ -173,11 +173,11 @@ public class Torus extends Shape {
 
 	Point3i[] generateTriangles(int numFacets)
 	{	
-		int latitude = numFacets;
+		int latitude = numFacets+1;
         int longitude = numFacets;
 		List<Point3i> triangleList = new ArrayList<>();
 
-		for (int i = 0; i < latitude - 1; i++) {
+		for (int i = 0; i < latitude; i++) {
 			for (int j = 0; j < longitude; j++) {
 				int currentVertex = i * longitude + j;
 				int nextRowVertex = ((i + 1) % latitude) * longitude + j;
