@@ -158,6 +158,7 @@ public class Sphere extends Shape {
 
         for (int i = 0; i < vertices.length; i++) {
             normals[i] = new Vector3f(vertices[i]);
+			normals[i].normalize();
         }
 
         return normals;

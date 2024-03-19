@@ -149,26 +149,59 @@ public class Torus extends Shape {
         }
 
 		//test output
-		for (int i = 0; i < vertices2D.length; i++) {
-			for (int j = 0; j < vertices2D[i].length; j++) {
-				System.out.print("(" + vertices2D[i][j].x + ", " + vertices2D[i][j].y + ", " + vertices2D[i][j].z + ") ");
-			}
-			System.out.println("line end");
-			System.out.println();
-		}
+		// for (int i = 0; i < vertices2D.length; i++) {
+		// 	for (int j = 0; j < vertices2D[i].length; j++) {
+		// 		System.out.print("(" + vertices2D[i][j].x + ", " + vertices2D[i][j].y + ", " + vertices2D[i][j].z + ") ");
+		// 	}
+		// 	System.out.println("line end");
+		// 	System.out.println();
+		// }
 
 		return vertices;
 	}
 
 	Vector3f[] generateNormals(int numFacets, Point3f[] vertices)
 	{
-		Vector3f[] normals = new Vector3f[vertices.length];
+		int latitude = numFacets+1;			// top/bottom
+		int longitude = numFacets;			// left/right
+		Vector3f[][] normals2D = new Vector3f[latitude][longitude];
 
-        for (int i = 0; i < vertices.length; i++) {
-            normals[i] = new Vector3f(vertices[i]);
+		float R = 1.0f;
+		float r = R /aspectRatio;
+
+		double latAngleIncrement = 360.0f / (latitude-1);
+    	double lonAngleIncrement = 360.0f / longitude;
+				
+		for (int i = 0; i < latitude; i++) 
+		{
+			double lat = latAngleIncrement * i;
+
+            for (int j = 0; j < longitude; j++) 
+			{
+				double lon = lonAngleIncrement * j;
+
+				float x = (R + r * cos(Math.toRadians(lon))) * cos(Math.toRadians(lat));
+				float y = (R + r * cos(Math.toRadians(lon))) * sin(Math.toRadians(lat));
+				float z = r * sin(Math.toRadians(lon));
+				
+				//calc the x and y coordinate of the vector
+				//from the center of the circle to the point on the surface
+				normals2D[i][j] = new Vector3f(x - R * cos(Math.toRadians(lat)), 
+											   y - R * sin(Math.toRadians(lat)),
+											   z);
+			}
         }
 
-        return normals;
+		// flatten 2d array to 1d
+		int index = 0;
+        Vector3f[] normals = new Vector3f[latitude * longitude];
+        for (int i = 0; i < latitude; i++) {
+            for (int j = 0; j < longitude; j++) {
+                normals[index++] = normals2D[i][j];
+            }
+        }
+
+		return normals;
 	}
 
 	Point3i[] generateTriangles(int numFacets)
@@ -187,7 +220,7 @@ public class Torus extends Shape {
 				triangleList.add(new Point3i(currentVertex, nextRowVertex, nextColumnVertex));
 				triangleList.add(new Point3i(nextRowVertex, nextRowColumnVertex, nextColumnVertex));
 			}
-		}
+		}		
 
 		//convert to array
 		Point3i[] triangles = triangleList.toArray(new Point3i[triangleList.size()]);		
