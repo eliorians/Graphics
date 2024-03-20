@@ -69,7 +69,6 @@ public abstract class Manip {
 		}
 	}
 
-
 	/**
 	 * Compute the viewing ray from the eye point through the mouse location into the scene.
 	 * @param mouse the 2D mouse location in the view rectangle [-1, 1]
@@ -78,7 +77,13 @@ public abstract class Manip {
 	 */
 	public void computeViewingRay(Vector2f mouse, Point3f p, Vector3f d) {
 		// TODO: Part 3: Implement this method
-		throw new UnsupportedOperationException();
+		
+		p.set(c.getEye());
+		
+		Vector3f dir = new Vector3f(pickedMousePoint.x, pickedMousePoint.y, -1);
+		c.convertMotion(mouse, dir);
+		d.set(dir);
+		d.normalize();
 	}
 
 	/**

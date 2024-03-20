@@ -57,7 +57,7 @@ public class ModelTest3 extends ModelHelpers {
 	}	
 	
 	@Test
-	public void testComputeAxisRay() throws InterruptedException {
+		public void testComputeAxisRay() throws InterruptedException {
 		MainFrame m = new MainFrame(false);
 		m.setVisible(true);
 		

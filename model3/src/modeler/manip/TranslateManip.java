@@ -18,7 +18,9 @@ public class TranslateManip extends Manip {
 
 	public void dragged(Vector2f mousePosition, Vector2f mouseDelta) {
 		// TODO: Part 3: Implement this method
-		throw new UnsupportedOperationException();
+
+		Vector3f translation = new Vector3f(mouseDelta.x, mouseDelta.y, 0);
+		t.getTranslate().add(translation);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////

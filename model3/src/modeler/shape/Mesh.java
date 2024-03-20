@@ -138,7 +138,42 @@ public class Mesh {
 	 */
 	public void render(GL gl) {
 		// TODO: Part 1: Implement this method.
-		throw new UnsupportedOperationException();
+		gl.glEnable(GL.GL_CULL_FACE);
+		gl.glCullFace(GL.GL_BACK);
+		gl.glBegin(GL.GL_TRIANGLES);
+
+		for (int i = 0 ; i < numTriangles; i++)
+		{
+			//vertex indeces
+			int v1Index = triangles.get(i * 3);
+			int v2Index = triangles.get(i * 3 + 1);
+			int v3Index = triangles.get(i * 3 + 2);
+
+			// vertex / normal 1
+			gl.glNormal3f(normals.get(v1Index * 3), normals.get(v1Index * 3 + 1), normals.get(v1Index * 3 + 2));
+			gl.glVertex3f(verts.get(v1Index * 3), verts.get(v1Index * 3 + 1), verts.get(v1Index * 3 + 2));
+
+			// vertex / normal 2
+			gl.glNormal3f(normals.get(v2Index * 3), normals.get(v2Index * 3 + 1), normals.get(v2Index * 3 + 2));
+			gl.glVertex3f(verts.get(v2Index * 3), verts.get(v2Index * 3 + 1), verts.get(v2Index * 3 + 2));
+
+			// vertex / normal 3
+			gl.glNormal3f(normals.get(v3Index * 3), normals.get(v3Index * 3 + 1), normals.get(v3Index * 3 + 2));
+			gl.glVertex3f(verts.get(v3Index * 3), verts.get(v3Index * 3 + 1), verts.get(v3Index * 3 + 2));
+
+			//testing output
+			// System.out.println("Triangles #: " + i);
+			// System.out.println("normal 1: (" + normals.get(v1Index * 3) + ", " + normals.get(v1Index * 3+1) + ", " + normals.get(v1Index * 3+2) + ")");
+			// System.out.println("normal 2: (" + normals.get(v2Index * 3) + ", " + normals.get(v2Index * 3+1) + ", " + normals.get(v2Index * 3+2) + ")");
+			// System.out.println("normal 3: (" + normals.get(v3Index * 3) + ", " + normals.get(v3Index * 3+1) + ", " + normals.get(v3Index * 3+2) + ")");
+			// System.out.println("vert 1: (" + verts.get(v1Index * 3) + ", " + verts.get(v1Index * 3+1) + ", " + verts.get(v1Index * 3+2) + ")");
+			// System.out.println("vert 2: (" + verts.get(v2Index * 3) + ", " + verts.get(v2Index * 3+1) + ", " + verts.get(v2Index * 3+2) + ")");
+			// System.out.println("vert 3: (" + verts.get(v3Index * 3) + ", " + verts.get(v3Index * 3+1) + ", " + verts.get(v3Index * 3+2) + ")");
+			// System.out.println("");
+		}
+
+		gl.glEnd();
+		gl.glDisable(GL.GL_CULL_FACE);
 	}
 
 	/**
