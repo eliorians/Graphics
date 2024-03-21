@@ -53,6 +53,8 @@ public class ModelTest3 extends ModelHelpers {
 			System.out.println(correct);
 			assertTupleEquals("Incorrect ray origin for mouse = " + mouse, o, p, 1e-5);
 			assertTupleEquals("Incorrect ray direction for mouse = " + mouse, correct, d, 1e-5);
+
+
 		}
 	}	
 	

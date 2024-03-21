@@ -9,6 +9,13 @@
             "name": "MainFrame",
             "request": "launch",
             "mainClass": "modeler.MainFrame",
+            "projectName": "model3_c81be296"
+        },
+        {
+            "type": "java",
+            "name": "MainFrame",
+            "request": "launch",
+            "mainClass": "modeler.MainFrame",
             "projectName": "model_1d988181"
         },
         {

@@ -69,6 +69,11 @@ public abstract class Manip {
 		}
 	}
 
+	// QUESTIONS
+	// what does convertMotion do?
+	// global pickedMousePoint vs mouse passed to the function?
+	// is the flow of this, that each type of interactions calls compute psudo interaction and then performs their interactions based on that value?
+
 	/**
 	 * Compute the viewing ray from the eye point through the mouse location into the scene.
 	 * @param mouse the 2D mouse location in the view rectangle [-1, 1]
@@ -77,13 +82,14 @@ public abstract class Manip {
 	 */
 	public void computeViewingRay(Vector2f mouse, Point3f p, Vector3f d) {
 		// TODO: Part 3: Implement this method
-		
+
+		//origin of the ray
 		p.set(c.getEye());
 		
-		Vector3f dir = new Vector3f(pickedMousePoint.x, pickedMousePoint.y, -1);
-		c.convertMotion(mouse, dir);
+		//direction of the ray
+		Vector3f dir = new Vector3f(pickedMousePoint.x - p.x, pickedMousePoint.y - p.y, -1);
+		//c.convertMotion(mouse, dir);
 		d.set(dir);
-		d.normalize();
 	}
 
 	/**
@@ -93,7 +99,21 @@ public abstract class Manip {
 	 */
 	public void computeAxisRay(Point3f p, Vector3f d) {
 		// TODO: Part 3: Implement this method
-		throw new UnsupportedOperationException();
+
+		p.set(0,0,0);
+		
+		if (axisMode == X_AXIS)
+		{
+			d.set(1,0,0);
+		}
+		if (axisMode == Y_AXIS)
+		{
+			d.set(0,1,0);
+		}
+		if (axisMode == Z_AXIS)
+		{
+			d.set(0,0,1);
+		}
 	}
 
 	/**
