@@ -81,7 +81,6 @@ public abstract class Manip {
 	 * @param d the vector to store the direction of the ray
 	 */
 	public void computeViewingRay(Vector2f mouse, Point3f p, Vector3f d) {
-		// TODO: Part 3: Implement this method
 
 		//origin of the ray
 		p.set(c.getEye());
@@ -102,21 +101,20 @@ public abstract class Manip {
 	 * @param d the vector to store the direction of the ray
 	 */
 	public void computeAxisRay(Point3f p, Vector3f d) {
-		// TODO: Part 3: Implement this method
 
-		p.set(0,0,0);
+		p.set(e0);
 		
-		if (axisMode == X_AXIS)
+		if (axisMode == PICK_X)
 		{
-			d.set(1,0,0);
+			d.set(eX);
 		}
-		if (axisMode == Y_AXIS)
+		if (axisMode == PICK_Y)
 		{
-			d.set(0,1,0);
+			d.set(eY);
 		}
-		if (axisMode == Z_AXIS)
+		if (axisMode == PICK_Z)
 		{
-			d.set(0,0,1);
+			d.set(eZ);
 		}
 	}
 
