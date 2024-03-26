@@ -19,8 +19,31 @@ public class TranslateManip extends Manip {
 	public void dragged(Vector2f mousePosition, Vector2f mouseDelta) {
 		// TODO: Part 3: Implement this method
 
-		Vector3f translation = new Vector3f(mouseDelta.x, mouseDelta.y, 0);
-		t.getTranslate().add(translation);
+
+		//get axis ray
+		Point3f axisOrigin = new Point3f();
+		Vector3f axisDirection = new Vector3f();
+		computeAxisRay(axisOrigin, axisDirection);
+
+		//get viewing ray
+		Point3f viewOrigin = new Point3f();
+		Vector3f viewDirection = new Vector3f();
+		computeViewingRay(mousePosition, viewOrigin, viewDirection);
+
+		//get t
+		float tValue = computePseudointersection(axisOrigin, axisDirection, viewOrigin, viewDirection);
+
+		//scale selected axis by t value
+		Vector3f translationAmount = new Vector3f();
+    	translationAmount.scale(tValue, axisDirection);
+
+		// Update the translation component of the transformation
+		Vector3f currentTranslation = t.getTranslate();
+		currentTranslation.add(translationAmount);
+		t.setTranslate(currentTranslation);
+
+		//refresh
+		refreshTransformationAttributePanel();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -116,6 +116,10 @@ public abstract class Manip {
 		{
 			d.set(eZ);
 		}
+		if (axisMode == PICK_OTHER)
+		{
+			d.set(e0);
+		}
 	}
 
 	/**
@@ -129,9 +133,31 @@ public abstract class Manip {
 	 * @param e direction of second ray
 	 * @return t2, the t-value for the point on the second ray 
 	 */
-	public float computePseudointersection(Point3f a, Vector3f d, Point3f b, Vector3f e) {
-		// TODO: Part 3: Implement this method
-		throw new UnsupportedOperationException();
+	public float computePseudointersection(Point3f a, Vector3f d, Point3f b, Vector3f e) {		
+		
+		// distance = |(b + t2 dot e) - (a + t1 dot d)|
+		// 1) square both sides
+		// 2) expand
+		// 3) find derivative of t2
+		// 4) solve for t2
+		// 5) substitude in t1 (orignial)
+		// 6) simplify, results in formula below 
+
+		//create vector f, from origin of ray2 to origin of ray1
+		Vector3f f = new Vector3f();
+		f.sub(b, a);
+
+		//dot products for formula
+		float dd = d.dot(d);	//ray1 and itself (squared length of vector)
+		float ee = e.dot(e);	//ray2 and itself (squared length of vector)
+		float de = d.dot(e);	//ray1 and ray2   
+		float df = d.dot(f);	//ray1 and f
+		float ef = e.dot(f);	//ray2 and f
+
+		float denom = dd * ee - de * de;
+		float t2 = (de * df - dd * ef) / denom;
+
+		return t2;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
