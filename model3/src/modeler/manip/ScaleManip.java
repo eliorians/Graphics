@@ -1,5 +1,6 @@
 package modeler.manip;
 
+import javax.vecmath.Point3f;
 import javax.vecmath.Vector2f;
 import javax.vecmath.Vector3f;
 
@@ -18,7 +19,36 @@ public class ScaleManip extends Manip {
 
 	public void dragged(Vector2f mousePosition, Vector2f mouseDelta) {
 		// TODO: Part 3: Implement this method
-		throw new UnsupportedOperationException();
+
+		//get axis ray
+		Point3f axisOrigin = new Point3f();
+		Vector3f axisDirection = new Vector3f();
+		computeAxisRay(axisOrigin, axisDirection);
+
+		//get viewing ray for start position
+		Point3f viewOriginStart = new Point3f();
+		Vector3f viewDirectionStart = new Vector3f();
+		computeViewingRay(mousePosition, viewOriginStart, viewDirectionStart);
+
+		//get viewing ray for end position
+		Point3f viewOriginEnd = new Point3f();
+		Vector3f viewDirectionEnd = new Vector3f();
+		Vector2f newMousePosition = new Vector2f(mousePosition.x + mouseDelta.x, mousePosition.y + mouseDelta.y);
+		computeViewingRay(newMousePosition, viewOriginEnd, viewDirectionEnd);
+
+		//get T values
+		float tStart = computePseudointersection(viewOriginStart, viewDirectionStart, axisOrigin, axisDirection);
+		float tEnd = computePseudointersection(viewOriginEnd, viewDirectionEnd, axisOrigin, axisDirection);
+		float tDifference = tEnd - tStart;
+
+		//scale selected axis by t value
+		Vector3f translationAmount = new Vector3f();
+		translationAmount.scale(tDifference, axisDirection);
+
+		//update the translation component of the transformation
+		Vector3f currentTranslation = t.getScale();
+		currentTranslation.add(translationAmount);
+		t.setScale(currentTranslation);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////

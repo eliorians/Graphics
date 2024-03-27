@@ -85,7 +85,7 @@ public abstract class Manip {
 		//origin of the ray
 		p.set(c.getEye());
 		
-		Vector2f mouseDelta = new Vector2f(pickedMousePoint.x - mouse.x, pickedMousePoint.y - mouse.y);
+		Vector2f mouseDelta = new Vector2f(0 - mouse.x, 0 - mouse.y);
 
 		//direction of the ray
 		Vector3f dir = new Vector3f();
@@ -115,10 +115,6 @@ public abstract class Manip {
 		if (axisMode == PICK_Z)
 		{
 			d.set(eZ);
-		}
-		if (axisMode == PICK_OTHER)
-		{
-			d.set(e0);
 		}
 	}
 

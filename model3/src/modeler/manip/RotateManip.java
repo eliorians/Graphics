@@ -16,9 +16,26 @@ public class RotateManip extends Manip {
 		this.t = t;
 	}
 
-	public void dragged(Vector2f mousePosition, Vector2f mouseDelta) {
-		// TODO: Part 3: Implement this method
-		throw new UnsupportedOperationException();
+	public void dragged(Vector2f mousePosition, Vector2f mouseDelta) {		
+		float rotationAngle;
+
+		if(axisMode == PICK_X)
+		{
+			rotationAngle = mouseDelta.y * 360.0f;
+			t.setRotate(new Vector3f(rotationAngle, t.getRotate().y, t.getRotate().z));
+			
+		}
+		if(axisMode == PICK_Y)
+		{
+			rotationAngle = mouseDelta.y * 360.0f;
+			t.setRotate(new Vector3f(t.getRotate().x, rotationAngle, t.getRotate().z));
+	
+		}
+		if(axisMode == PICK_Z)
+		{
+			rotationAngle = mouseDelta.y * 360.0f;		
+			t.setRotate(new Vector3f(t.getRotate().x, t.getRotate().y, rotationAngle));
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////

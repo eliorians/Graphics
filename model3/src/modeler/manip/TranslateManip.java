@@ -19,31 +19,35 @@ public class TranslateManip extends Manip {
 	public void dragged(Vector2f mousePosition, Vector2f mouseDelta) {
 		// TODO: Part 3: Implement this method
 
-
 		//get axis ray
 		Point3f axisOrigin = new Point3f();
 		Vector3f axisDirection = new Vector3f();
 		computeAxisRay(axisOrigin, axisDirection);
 
-		//get viewing ray
-		Point3f viewOrigin = new Point3f();
-		Vector3f viewDirection = new Vector3f();
-		computeViewingRay(mousePosition, viewOrigin, viewDirection);
+		//get viewing ray for start position
+		Point3f viewOriginStart = new Point3f();
+		Vector3f viewDirectionStart = new Vector3f();
+    	computeViewingRay(mousePosition, viewOriginStart, viewDirectionStart);
 
-		//get t
-		float tValue = computePseudointersection(axisOrigin, axisDirection, viewOrigin, viewDirection);
+		//get viewing ray for end position
+		Point3f viewOriginEnd = new Point3f();
+		Vector3f viewDirectionEnd = new Vector3f();
+		Vector2f newMousePosition = new Vector2f(mousePosition.x + mouseDelta.x, mousePosition.y + mouseDelta.y);
+		computeViewingRay(newMousePosition, viewOriginEnd, viewDirectionEnd);
+
+		//get T values
+		float tStart = computePseudointersection(viewOriginStart, viewDirectionStart, axisOrigin, axisDirection);
+		float tEnd = computePseudointersection(viewOriginEnd, viewDirectionEnd, axisOrigin, axisDirection);
+		float tDifference = tEnd - tStart;
 
 		//scale selected axis by t value
 		Vector3f translationAmount = new Vector3f();
-    	translationAmount.scale(tValue, axisDirection);
+    	translationAmount.scale(tDifference, axisDirection);
 
-		// Update the translation component of the transformation
+		//update the translation component of the transformation
 		Vector3f currentTranslation = t.getTranslate();
 		currentTranslation.add(translationAmount);
 		t.setTranslate(currentTranslation);
-
-		//refresh
-		refreshTransformationAttributePanel();
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
