@@ -21,11 +21,11 @@ public class TranslateManip extends Manip {
 		//grabbing the center point
 		if (axisMode == PICK_OTHER)
 		{
-			mousePosition.x = -mousePosition.x;
-			mousePosition.y = -mousePosition.y;
+			mouseDelta.x = -mouseDelta.x;
+			mouseDelta.y = -mouseDelta.y;
 
 			Vector3f mouse3D = new Vector3f();
-			c.convertMotion(mousePosition, mouse3D);
+			c.convertMotion(mouseDelta, mouse3D);
 			t.setTranslate(mouse3D);
 		}
 		//grabbing individual axis
