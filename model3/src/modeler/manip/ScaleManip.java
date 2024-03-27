@@ -20,35 +20,58 @@ public class ScaleManip extends Manip {
 	public void dragged(Vector2f mousePosition, Vector2f mouseDelta) {
 		// TODO: Part 3: Implement this method
 
-		//get axis ray
-		Point3f axisOrigin = new Point3f();
-		Vector3f axisDirection = new Vector3f();
-		computeAxisRay(axisOrigin, axisDirection);
+		//grabbing the center point
+		if (axisMode == PICK_OTHER)
+		{
+			float scale = mouseDelta.y * 2 + 1;
+			Vector3f currentScale = t.getScale();
+			currentScale.scale(scale);
+			t.setScale(currentScale);
+		}
+		//grabbing individual axis
+		else
+		{
+			//get axis ray
+			Point3f axisOrigin = new Point3f();
+			Vector3f axisDirection = new Vector3f();
+			computeAxisRay(axisOrigin, axisDirection);
 
-		//get viewing ray for start position
-		Point3f viewOriginStart = new Point3f();
-		Vector3f viewDirectionStart = new Vector3f();
-		computeViewingRay(mousePosition, viewOriginStart, viewDirectionStart);
+			//get viewing ray for start position
+			Point3f viewOriginStart = new Point3f();
+			Vector3f viewDirectionStart = new Vector3f();
+			Vector2f startMouse = new Vector2f(mousePosition.x - mouseDelta.x, mousePosition.y - mouseDelta.y);
+			computeViewingRay(startMouse, viewOriginStart, viewDirectionStart);
 
-		//get viewing ray for end position
-		Point3f viewOriginEnd = new Point3f();
-		Vector3f viewDirectionEnd = new Vector3f();
-		Vector2f newMousePosition = new Vector2f(mousePosition.x + mouseDelta.x, mousePosition.y + mouseDelta.y);
-		computeViewingRay(newMousePosition, viewOriginEnd, viewDirectionEnd);
+			//get viewing ray for end position
+			Point3f viewOriginEnd = new Point3f();
+			Vector3f viewDirectionEnd = new Vector3f();
+			computeViewingRay(mousePosition, viewOriginEnd, viewDirectionEnd);
 
-		//get T values
-		float tStart = computePseudointersection(viewOriginStart, viewDirectionStart, axisOrigin, axisDirection);
-		float tEnd = computePseudointersection(viewOriginEnd, viewDirectionEnd, axisOrigin, axisDirection);
-		float tDifference = tEnd - tStart;
+			//get T values
+			float tStart = computePseudointersection(viewOriginStart, viewDirectionStart, axisOrigin, axisDirection);
+			float tEnd = computePseudointersection(viewOriginEnd, viewDirectionEnd, axisOrigin, axisDirection);
 
-		//scale selected axis by t value
-		Vector3f translationAmount = new Vector3f();
-		translationAmount.scale(tDifference, axisDirection);
+			//find ratio
+			float tDifference = (tEnd / tStart);
 
-		//update the translation component of the transformation
-		Vector3f currentTranslation = t.getScale();
-		currentTranslation.add(translationAmount);
-		t.setScale(currentTranslation);
+			//set scale
+			Vector3f currentScale = t.getScale();
+
+			if (axisMode == PICK_X)
+			{
+				currentScale.x = tDifference;
+			}
+			if (axisMode == PICK_Y)
+			{
+				currentScale.y = tDifference;
+			}
+			if (axisMode == PICK_Z)
+			{
+				currentScale.z = tDifference;
+			}
+
+			t.setScale(currentScale);
+		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
